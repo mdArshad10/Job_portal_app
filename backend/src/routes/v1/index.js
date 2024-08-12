@@ -1,3 +1,9 @@
-const userRoute = require("./user.route.js");
+const { Router } = require("express");
+const registerValidator = require("../../middlewares/user-validator.js");
+const router = Router();
 
-module.exports = userRoute;
+// ======== user routes ======== 
+// router.route('/register').post(registerValidator,)
+
+
+module.exports = router;

@@ -5,7 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const { StatusCodes } = require("http-status-codes");
 const { corsOrigin, port } = require("./constant.js");
-const routers = require("./routes");
+const apiRoutes = require("./routes");
 
 // app object
 const app = express();
@@ -23,7 +23,7 @@ app.use(
   })
 );
 
-app.use("/api", routers);
+app.use("/api", apiRoutes);
 app.use("*", (req, res, next) => {
   res.status(StatusCodes.OK).json({
     data: null,

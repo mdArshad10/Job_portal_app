@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
         type:mongoose.Schema.Types.ObjectId,
         ref:'Company'
       }],
-      profilePhone:{
+      profilePhoto:{
         type:String,
         default:"",
         required:[true,"profile photo is required"]

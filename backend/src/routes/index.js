@@ -1,8 +1,8 @@
 const { Router } = require("express");
-const expressRouters = require("./v1/index.js");
+const v1Routes = require("./v1");
 
 const router = Router();
 
-router.use("/v1", expressRouters);
+router.use("/v1", v1Routes);
 
 module.exports = router;
