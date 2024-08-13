@@ -56,6 +56,39 @@ class UserServices {
 			throw error;
 		}
 	}
+
+	async updateUser(data) {
+		try {
+			const { userId } = req.user;
+			const file = req.file;
+
+			const user = await this.UserRepository.getById(
+				userId,
+			);
+			const skillsArray = skills.split(",");
+
+			// cloudinary ayega idhar
+
+			// update skills array in user document
+			user.skills = skillsArray;
+			user.fullName = data.fullName;
+			user.email = data.email;
+			user.phoneNumber = data.phoneNumber;
+			user.profile.bio = data.bio;
+			user.profile.skills = skillsArray;
+
+			// update user document
+			const updatedUser = await user.save();
+
+			return updatedUser;
+		} catch (error) {
+			console.log(
+				"some thing wrong on services layer",
+				error,
+			);
+			throw error;
+		}
+	}
 }
 
 module.exports = UserServices;

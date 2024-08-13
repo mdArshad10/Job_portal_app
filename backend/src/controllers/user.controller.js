@@ -29,6 +29,12 @@ const generateToken = userId => {
 const registerTheUser = async (req, res, next) => {
 	try {
 		const user = await UserService.register(req.body);
+		res.status(StatusCodes.CREATED).json({
+			success: true,
+			message: "Account created successfully",
+			data: user,
+			err: null,
+		});
 	} catch (error) {
 		return res
 			.status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -75,6 +81,9 @@ const loginTheUser = async (req, res, next) => {
 	}
 };
 
+// @DESCRIPTION: this is used for the logout the user
+// @METHOD: [GET]      /api/v1/logout
+// @ACCESS: private
 const logoutTheUser = async (req, res, next) => {
 	try {
 		return res
@@ -94,6 +103,36 @@ const logoutTheUser = async (req, res, next) => {
 			data: null,
 			err: error,
 		});
+	}
+};
+
+// @DESCRIPTION: this is used for the logout the user
+// @METHOD: [PUT]      /api/v1/profile/update
+// @ACCESS: private
+const updateTheProfile = async (req, res, next) => {
+	try {
+		const response = await UserService.updateUser(
+			req.body,
+		);
+		return res.status(StatusCodes.OK).json({
+			message: "update the profile",
+			success: true,
+			data: response,
+			err: null,
+		});
+	} catch (error) {
+		console.log(
+			"some error with update the profile on controller",
+			error,
+		);
+		return res
+			.status(StatusCodes.INTERNAL_SERVER_ERROR)
+			.json({
+				success: false,
+				message: "some thing wrong with controller",
+				data: null,
+				err: error,
+			});
 	}
 };
 
