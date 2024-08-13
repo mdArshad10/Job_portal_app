@@ -140,4 +140,5 @@ module.exports = {
 	registerTheUser,
 	loginTheUser,
 	logoutTheUser,
+	updateTheProfile,
 };
