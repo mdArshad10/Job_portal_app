@@ -27,6 +27,15 @@ const Signup = () => {
   const submitSignupHandler = (e) => {
     e.preventDefault();
     console.log(userInput);
+    const formData = new FormData();
+    formData.append("fullName", userInput.fullName);
+    formData.append("email", userInput.email);
+    formData.append("password", userInput.password);
+    formData.append("phoneNumber", userInput.phoneNumber);
+    formData.append("role", userInput.role);
+    if(userInput.file){
+      formData.append("file", userInput.file);
+    }
   };
 
   return (
