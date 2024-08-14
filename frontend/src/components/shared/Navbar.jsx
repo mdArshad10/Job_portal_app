@@ -2,11 +2,12 @@ import { LogOut, User2 } from "lucide-react";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const user = false;
   return (
-    <div className="bg-white ">
+    <div className="bg-white border border-gray-300">
       <div className="flex flex-row justify-between items-center mx-auto max-w-7xl h-16">
         <div>
           <h1 className="text-2xl font-bold">
@@ -60,10 +61,16 @@ const Navbar = () => {
             </Popover>
           ) : (
             <div className="flex flex-row gap-2 items-center">
-              <Button className="hover:outline-black hover:outline-2">SignIn</Button>
-              <Button className="bg-[#6A38C2] hover:bg-[#6A38e4] text-white rounded-xl">
-                Login
-              </Button>
+              <Link to="/signup">
+                <Button className="hover:outline-black hover:outline-2">
+                  SignIn
+                </Button>
+              </Link>
+              <Link to="/login">
+                <Button className="bg-[#6A38C2] hover:bg-[#6A38e4] text-white rounded-xl">
+                  Login
+                </Button>
+              </Link>
             </div>
           )}
         </div>
