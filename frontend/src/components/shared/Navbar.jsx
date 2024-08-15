@@ -17,13 +17,13 @@ const Navbar = () => {
         <div className="flex flex-row gap-5 items-center">
           <ul className="flex font-medium items-center gap-5">
             <li>
-              <Link top="/">Home</Link>
+              <Link to="/">Home</Link>
             </li>
             <li>
-              <Link>Jobs</Link>
+              <Link to="/jobs">Jobs</Link>
             </li>
             <li>
-              <Link>Browse</Link>
+              <Link to="/browse">Browse</Link>
             </li>
           </ul>
 
