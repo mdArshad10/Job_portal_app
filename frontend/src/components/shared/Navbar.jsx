@@ -5,7 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const user = false;
+  const user = true;
   return (
     <div className="bg-white border border-gray-300">
       <div className="flex flex-row justify-between items-center mx-auto max-w-7xl h-16">
@@ -37,7 +37,7 @@ const Navbar = () => {
                   />
                 </Avatar>
               </PopoverTrigger>
-              <PopoverContent className="w-80">
+              <PopoverContent className="w-80 bg-slate-100 z-10">
                 <div className="flex items-center gap-4">
                   <Avatar className="cursor-pointer">
                     <AvatarImage
@@ -55,12 +55,20 @@ const Navbar = () => {
                 </div>
                 <div className="my-2">
                   <div className="flex gap-1 items-center">
-                    <User2 />
-                    <Button variant="link">View Profile</Button>
+                    <Link to="/profile">
+                      <Button variant="link">
+                        <User2 className="mr-2" />
+                        View Profile
+                      </Button>
+                    </Link>
                   </div>
                   <div className="flex gap-1 items-center">
-                    <LogOut />
-                    <Button variant="link">Logout</Button>
+                    <Link>
+                      <Button variant="link">
+                        <LogOut className="mr-2" />
+                        Logout
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </PopoverContent>
