@@ -2,6 +2,8 @@ const { UserServices } = require("../services");
 const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const { accessSecretKey } = require("../constant.js");
+const ErrorHandler = require("../utils/error.js");
+const { validationResult } = require("express-validator");
 
 const UserService = new UserServices();
 
@@ -28,6 +30,17 @@ const generateToken = userId => {
 // @ACCESS: public
 const registerTheUser = async (req, res, next) => {
 	try {
+		const result = validationResult(req);
+		if (result.isEmpty()) {
+			throw new ErrorHandler(
+				false,
+				result.array(),
+				StatusCodes.BAD_REQUEST,
+				result.array(),
+				null,
+			);
+		}
+
 		const user = await UserService.register(req.body);
 		res.status(StatusCodes.CREATED).json({
 			success: true,
@@ -36,14 +49,12 @@ const registerTheUser = async (req, res, next) => {
 			err: null,
 		});
 	} catch (error) {
-		return res
-			.status(StatusCodes.INTERNAL_SERVER_ERROR)
-			.json({
-				data: null,
-				message: error.message,
-				success: false,
-				err: error,
-			});
+		return res.status(error.StatusCodes).json({
+			data: error.data,
+			message: error.message,
+			success: error.success,
+			err: error,
+		});
 	}
 };
 
@@ -53,6 +64,8 @@ const registerTheUser = async (req, res, next) => {
 const loginTheUser = async (req, res, next) => {
 	try {
 		const response = await UserService.login(req.body);
+		console.log(response);
+
 		const token = generateToken(response._id);
 		return res
 			.status(StatusCodes.OK)

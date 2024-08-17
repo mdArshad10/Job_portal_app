@@ -2,9 +2,9 @@ const { StatusCodes } = require("http-status-codes");
 
 class ErrorHandler extends Error {
 	constructor(
-		statusCode = StatusCodes.INTERNAL_SERVER_ERROR,
 		success = false,
 		message = "Internal Server Error",
+		statusCode = StatusCodes.INTERNAL_SERVER_ERROR,
 		errors = null,
 		data = null,
 	) {

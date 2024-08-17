@@ -17,6 +17,8 @@ class UserServices {
 			);
 			return user;
 		} catch (error) {
+			console.log(error);
+
 			console.log(
 				"some error on services layer",
 				error,
@@ -40,14 +42,13 @@ class UserServices {
 			}
 
 			// check the role
-			if (req.body.role !== user.role) {
+			if (data.role !== user.role) {
 				throw new Error(
 					"Account doesn't exist with current role",
 				);
 			}
 
-			const { password, ...response } = user;
-			return response;
+			return user;
 		} catch (error) {
 			console.log(
 				"some thing wrong on services layer",

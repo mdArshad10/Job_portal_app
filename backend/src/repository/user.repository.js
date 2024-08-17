@@ -1,4 +1,6 @@
 const { User } = require("../models");
+const ErrorHandler = require("../utils/error.js");
+const { StatusCodes } = require("http-status-codes");
 
 class UserRepository {
 	async create(data) {
@@ -47,11 +49,18 @@ class UserRepository {
 			const user = await User.findOne({ email });
 			return user;
 		} catch (error) {
+			const err = new ErrorHandler(
+				false,
+				error.message,
+				StatusCodes.INTERNAL_SERVER_ERROR,
+				error,
+				null,
+			);
 			console.log(
 				"some error on userRepository",
 				error,
 			);
-			throw error;
+			throw err;
 		}
 	}
 

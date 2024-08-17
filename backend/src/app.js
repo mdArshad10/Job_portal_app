@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const { StatusCodes } = require("http-status-codes");
 const { corsOrigin, port } = require("./constant.js");
 const apiRoutes = require("./routes");
+const dbConnection = require("./config/db.js");
 
 // app object
 const app = express();
@@ -16,23 +17,24 @@ app.use(helmet());
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(
-  cors({
-    origin: corsOrigin,
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-  })
+	cors({
+		origin: corsOrigin,
+		credentials: true,
+		methods: ["GET", "POST", "PUT", "DELETE"],
+	}),
 );
 
 app.use("/api", apiRoutes);
 app.use("*", (req, res, next) => {
-  res.status(StatusCodes.OK).json({
-    data: null,
-    message: "page not found",
-    success: true,
-    error: null,
-  });
+	res.status(StatusCodes.OK).json({
+		data: null,
+		message: "page not found",
+		success: true,
+		error: null,
+	});
 });
 
 app.listen(port, async () => {
-  console.log(`the server is running at port ${port}`);
+	console.log(`the server is running at port ${port}`);
+	await dbConnection();
 });

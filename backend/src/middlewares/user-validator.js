@@ -1,95 +1,72 @@
-const { StatusCodes } = require("http-status-codes");
-const { UserRepository } = require("../repository");
+const { body } = require("express-validator");
 
-const userRepository = new UserRepository();
+const userRegisterDataValidate = [
+	body("fullName")
+		.trim()
+		.notEmpty()
+		.withMessage("Full Name is required")
+		.isLength({ min: 2 })
+		.withMessage(
+			"Full Name must be at least 2 characters long",
+		),
 
-const registerValidator = async (req, res, next) => {
-	try {
-		const {
-			fullName,
-			email,
-			password,
-			phoneNumber,
-			role,
-		} = req.body;
-		if (
-			!fullName ||
-			!email ||
-			!password ||
-			!phoneNumber ||
-			!role
-		) {
-			return res.status(StatusCodes.NOT_FOUND).json({
-				success: false,
-				data: null,
-				message: "all fields are required",
-				err: null,
-			});
-		}
+	body("email")
+		.trim()
+		.notEmpty()
+		.withMessage("Email is required")
+		.isEmail()
+		.withMessage("Must be a valid email address")
+		.normalizeEmail(),
 
-		const existingUser =
-			await userRepository.getByEmail(email);
-		if (existingUser) {
-			return res.status(StatusCodes.NOT_FOUND).json({
-				success: false,
-				data: null,
-				message: "user already exist",
-				err: null,
-			});
-		}
+	body("password")
+		.trim()
+		.notEmpty()
+		.withMessage("Password is required")
+		.isLength({ min: 6 })
+		.withMessage(
+			"Password must be at least 6 characters long",
+		),
 
-		next();
-	} catch (error) {
-		console.error("registerValidator error:", error);
-		return res
-			.status(StatusCodes.INTERNAL_SERVER_ERROR)
-			.json({
-				success: false,
-				data: null,
-				message:
-					"Some thing wrong with user validation",
-				err: error.message,
-			});
-	}
-};
+	body("phoneNumber")
+		.trim()
+		.notEmpty()
+		.withMessage("Phone number is required")
+		.isMobilePhone()
+		.withMessage("Must be a valid phone number"),
 
-const loginValidator = async (req, res, next) => {
-	try {
-		const { email, password, role } = req.body;
-		if (!email || !password || !role) {
-			return res.status(StatusCodes.NOT_FOUND).json({
-				success: false,
-				data: null,
-				message: "all fields are required",
-				err: null,
-			});
-		}
+	body("role")
+		.trim()
+		.notEmpty()
+		.withMessage("Role is required")
+		.isIn(["student", "recruiter"])
+		.withMessage(
+			"Role must be either student or recruiter",
+		),
 
-		const existingUser =
-			await userRepository.getByEmail(email);
-		if (!existingUser) {
-			return res.status(StatusCodes.NOT_FOUND).json({
-				success: false,
-				data: null,
-				message: "user not exist",
-				err: null,
-			});
-		}
+	body("profile.bio").optional().trim().escape(),
 
-		next();
-	} catch (error) {
-		console.log(
-			"some error on user input validation",
-			error,
-		);
-		return res.status(StatusCodes.NOT_FOUND).json({
-			success: false,
-			data: null,
-			message:
-				"some thing is wrong with login validation",
-			err: error,
-		});
-	}
-};
+	body("profile.skills")
+		.optional()
+		.isArray()
+		.withMessage("Skills should be an array")
+		.customSanitizer(skills =>
+			skills.map(skill => skill.trim().escape()),
+		),
 
-module.exports = { registerValidator, loginValidator };
+	body("profile.resume").optional().trim(),
+
+	body("profile.resumeOriginalName")
+		.optional()
+		.trim()
+		.escape(),
+
+	body("profile.profilePhoto")
+		.optional()
+		.trim()
+		.isURL()
+		.withMessage("Profile photo must be a valid URL"),
+];
+
+module.exports={
+	userRegisterDataValidate
+}

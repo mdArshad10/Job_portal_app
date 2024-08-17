@@ -17,6 +17,10 @@ const jobSchema = new mongoose.Schema(
 				"job requirements is required",
 			],
 		},
+		salary: {
+			type: Number,
+			required: true,
+		},
 		location: {
 			type: String,
 			required: [true, "job location is required"],
@@ -24,6 +28,10 @@ const jobSchema = new mongoose.Schema(
 		jobType: {
 			type: String,
 			required: [true, "job types is required"],
+		},
+		experienceLevel: {
+			type: Number,
+			required: true,
 		},
 		position: {
 			type: String,
@@ -40,10 +48,12 @@ const jobSchema = new mongoose.Schema(
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User",
 		},
-		applications: [{
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Application",
-		}],
+		applications: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Application",
+			},
+		],
 	},
 	{ timestamps: true },
 );
