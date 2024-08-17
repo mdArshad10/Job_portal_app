@@ -18,4 +18,20 @@ class ErrorHandler extends Error {
 	}
 }
 
+class ValidationErrorHandler extends ErrorHandler {
+	constructor(errors) {
+		let errorName = errors.name;
+		let explanation = errors.error.map(
+			err => err.message,
+		);
+		super(
+			false,
+			`${errorName}: ${explanation.join(", ")}`,
+            StatusCodes.BAD_REQUEST,
+            errors,
+            null,
+		);
+	}
+}
+
 module.exports = ErrorHandler;
