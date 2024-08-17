@@ -52,7 +52,6 @@ app.use("*", (req, res, next) => {
 
 app.listen(port, async () => {
 	console.log(`the server is running at port ${port}`);
-
 	await dbConnection();
 
 });
