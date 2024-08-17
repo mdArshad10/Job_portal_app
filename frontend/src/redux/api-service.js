@@ -5,6 +5,6 @@ import { basicURL } from "../constant.js";
 // Define a service using a base URL and expected endpoints
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({ baseUrl }),
+  baseQuery: fetchBaseQuery({ baseUrl: basicURL }),
   endpoints: (builder) => ({}),
 });
