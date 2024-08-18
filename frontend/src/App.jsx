@@ -5,7 +5,7 @@ import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import Jobs from "./pages/Jobs";
 import Browse from "./pages/Browse";
-import Profile from "./components/Profile";
+import Profile from "./pages/Profile";
 
 const router = createBrowserRouter([
   {
