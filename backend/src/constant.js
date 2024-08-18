@@ -11,11 +11,11 @@ const databaseName = "job_portal";
 const nodeEnv = process.env.NODE_ENV;
 const accessSecretKey = process.env.ACCESS_SECRET_KEY;
 
-// const cloudinaryCloudName =
-// 	process.env.CLOUDINARY_CLOUD_NAME;
-// const cloudinaryApiKey = process.env.CLOUDINARY_API_KEY;
-// const cloudinaryApiSecretKey =
-// 	process.env.CLOUDINARY_API_SECRET_KEY;
+const cloudinaryCloudName =
+	process.env.CLOUDINARY_CLOUD_NAME;
+const cloudinaryApiKey = process.env.CLOUDINARY_API_KEY;
+const cloudinaryApiSecretKey =
+	process.env.CLOUDINARY_API_SECRET_KEY;
 
 module.exports = {
 	port,
@@ -24,7 +24,7 @@ module.exports = {
 	databaseName,
 	nodeEnv,
 	accessSecretKey,
-	// cloudinaryCloudName,
-	// cloudinaryApiKey,
-	// cloudinaryApiSecretKey,
+	cloudinaryCloudName,
+	cloudinaryApiKey,
+	cloudinaryApiSecretKey,
 };

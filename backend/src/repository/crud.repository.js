@@ -15,9 +15,9 @@ class CrudRepository {
 		}
 	}
 
-	async getById(id) {
+	async getByData(data) {
 		try {
-			const resp = await this.model.findById(id);
+			const resp = await this.model.find(data);
 			return resp;
 		} catch (error) {
 			console.log(
@@ -38,8 +38,6 @@ class CrudRepository {
 			throw error;
 		}
 	}
-
-
 
 	async update(id, data) {
 		try {

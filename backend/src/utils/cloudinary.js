@@ -1,5 +1,5 @@
 const cloudinary = require("cloudinary").v2;
-const fs = require("fs");
+const fs = require("node:fs/promises");
 const {
 	cloudinaryApiKey,
 	cloudinaryApiSecretKey,
@@ -22,11 +22,11 @@ const fileUploadInCloudinary = async filePath => {
 			},
 		);
 		console.log("file uploaded successfully");
-		fs.unlike(filePath);
+		await fs.unlink(filePath);
 
-		return response;
+		return response.url;
 	} catch (error) {
-		fs.unlike(filePath);
+		await fs.unlink(filePath);
 		return null;
 	}
 };

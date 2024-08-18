@@ -65,6 +65,9 @@ class ApplicationServices extends CrudRepository {
 			throw error;
 		}
 	}
+
+
+
 }
 
 module.exports = ApplicationServices;

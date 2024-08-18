@@ -30,18 +30,24 @@ const generateToken = userId => {
 // @ACCESS: public
 const registerTheUser = async (req, res, next) => {
 	try {
-		const result = validationResult(req);
-		if (result.isEmpty()) {
+		const { errors } = validationResult(req);
+		
+
+		if (errors.length != 0) {
+			const message = errors.map(err=>err.msg)
 			throw new ErrorHandler(
 				false,
-				result.array(),
+				"fill all the field",
 				StatusCodes.BAD_REQUEST,
-				result.array(),
-				null,
+				errors,
+				message,
 			);
 		}
+		// file
+		
+		
 
-		const user = await UserService.register(req.body);
+		const user = await UserService.register(req);
 		res.status(StatusCodes.CREATED).json({
 			success: true,
 			message: "Account created successfully",
@@ -49,7 +55,7 @@ const registerTheUser = async (req, res, next) => {
 			err: null,
 		});
 	} catch (error) {
-		return res.status(error.StatusCodes).json({
+		return res.status(StatusCodes.BAD_REQUEST).json({
 			data: error.data,
 			message: error.message,
 			success: error.success,
@@ -63,6 +69,19 @@ const registerTheUser = async (req, res, next) => {
 // @ACCESS: public
 const loginTheUser = async (req, res, next) => {
 	try {
+			const { errors } = validationResult(req);
+
+			if (errors.length != 0) {
+				const message = errors.map(err => err.msg);
+				throw new ErrorHandler(
+					false,
+					"fill all the field",
+					StatusCodes.BAD_REQUEST,
+					errors,
+					message,
+				);
+			}
+
 		const response = await UserService.login(req.body);
 		console.log(response);
 
@@ -81,16 +100,12 @@ const loginTheUser = async (req, res, next) => {
 			"some thing wrong with login the user in controller",
 			error,
 		);
-		return res
-			.status(StatusCodes.OK)
-			.cookie("token", token, cookieOptions)
-			.json({
-				success: false,
-				message:
-					"Some thing wrong with login the user in controller",
-				data: null,
-				err: error,
-			});
+		return res.status(StatusCodes.BAD_GATEWAY).json({
+			data: error.data,
+			message: error.message,
+			success: error.success,
+			err: error,
+		});
 	}
 };
 

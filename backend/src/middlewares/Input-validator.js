@@ -93,6 +93,8 @@ const userRegisterDataValidate = [
 		.trim()
 		.isURL()
 		.withMessage("Profile photo must be a valid URL"),
+
+	
 ];
 
 const userLoginDataValidate = [
@@ -111,6 +113,7 @@ const userLoginDataValidate = [
 				throw new Error("E-mail is not valid");
 			}
 		}),
+		
 	body("password")
 		.trim()
 		.notEmpty()

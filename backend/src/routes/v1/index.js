@@ -1,7 +1,8 @@
 const { Router } = require("express");
 const {
-	userRegisterDataValidate
-} = require("../../middlewares/user-validator.js");
+	userRegisterDataValidate,
+	userLoginDataValidate
+} = require("../../middlewares/Input-validator.js");
 const {
 	loginTheUser,
 	logoutTheUser,
@@ -11,12 +12,18 @@ const {
 const upload = require("../../middlewares/multer.js");
 const router = Router();
 
-const fileupload = upload.single("file");
+const fileUpload = upload.single("file");
 // ======== user routes ========
 router
 	.route("/register")
-	.post(userRegisterDataValidate, registerTheUser);
+	.post(
+		fileUpload,
+		userRegisterDataValidate,
+		registerTheUser,
+	);
 
-// router.route("/login").post(loginValidator, loginTheUser);
+router
+	.route("/login")
+	.post(userLoginDataValidate, loginTheUser);
 
 module.exports = router;

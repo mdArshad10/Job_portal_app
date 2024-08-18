@@ -1,17 +1,55 @@
 const { UserRepository } = require("../repository");
 const bcrypt = require("bcrypt");
+const fileUploadInCloudinary = require("../utils/cloudinary.js");
+const ErrorHandler = require("../utils/error.js");
+const { StatusCodes } = require("http-status-codes");
 
 class UserServices {
 	constructor() {
 		this.UserRepository = new UserRepository();
 	}
 
-	async register(data) {
+	async register(req) {
 		try {
-			data.password = await bcrypt.hash(
-				data.password,
+			const {
+				fullName,
+				email,
+				password,
+				phoneNumber,
+				role,
+			} = req.body;
+			const hashedpassword = await bcrypt.hash(
+				password,
 				10,
 			);
+			// Profile upload karna hai
+			console.log(req.file);
+
+			const fileUploadResponse =
+				await fileUploadInCloudinary(
+					req.file?.path,
+				);
+			console.log(fileUploadResponse);
+
+			if (!fileUploadResponse) {
+				throw new ErrorHandler(
+					false,
+					"file is not upload",
+					StatusCodes.BAD_REQUEST,
+				);
+			}
+
+			const data = {
+				fullName,
+				email,
+				password: hashedpassword,
+				phoneNumber,
+				role,
+				profile: {
+					profilePhoto: fileUploadResponse,
+				},
+			};
+
 			const user = await this.UserRepository.create(
 				data,
 			);
@@ -29,14 +67,17 @@ class UserServices {
 
 	async login(data) {
 		try {
+			
 			const user =
 				await this.UserRepository.getByEmail(
 					data.email,
 				);
-			const isMatchPassword = bcrypt.compare(
+			const isMatchPassword = await bcrypt.compare(
 				data.password,
 				user.password,
 			);
+			console.log(isMatchPassword);
+			
 			if (!isMatchPassword) {
 				throw new Error("invalid password");
 			}
