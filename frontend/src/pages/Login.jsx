@@ -86,7 +86,7 @@ const Login = () => {
 
           <Button className="w-full my-4 ">Login</Button>
           <span>
-            Don't have an account ?{" "}
+            Dont have an account ?
             <Link to="/Signup" className="text-blue-400 ">
               Signup
             </Link>

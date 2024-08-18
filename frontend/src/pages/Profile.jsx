@@ -4,13 +4,16 @@ import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import UpdateProfileDialog from "@/components/UpdateProfileDialog";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { Contact, Mail, Pen } from "lucide-react";
+import { useState } from "react";
 
 // const skills = ["html", "CSS", "javascript", "Reactjs"];
 const skills = [];
 const Profile = () => {
   const isHaveResume = true;
+  const [dialogBox, setDialogBox] = useState(false);
   return (
     <div>
       <Navbar />
@@ -33,7 +36,11 @@ const Profile = () => {
               </p>
             </div>
           </div>
-          <Button className="text-light rounded-xl" variant="outline">
+          <Button
+            onClick={() => setDialogBox(true)}
+            className="text-light rounded-xl"
+            variant="outline"
+          >
             <Pen />
           </Button>
         </div>
@@ -82,11 +89,14 @@ const Profile = () => {
           )}
         </div>
         <div className="max-w-6xl mx-auto bg-white rounded-2xl ">
-          <h1  className="font-bold text-lg my-5">Applied Jobs</h1>
+          <h1 className="font-bold text-lg my-5">Applied Jobs</h1>
           {/* jobs tables */}
-          <AppliedJobTable/>
+          <AppliedJobTable />
         </div>
-        <div></div>
+        <UpdateProfileDialog
+          dialogBox={dialogBox}
+          setDialogBox={setDialogBox}
+        />
       </div>
     </div>
   );
