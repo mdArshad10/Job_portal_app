@@ -5,7 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const user = true;
+  const user = false;
   return (
     <div className="bg-white border border-gray-300">
       <div className="flex flex-row justify-between items-center mx-auto max-w-7xl h-16">

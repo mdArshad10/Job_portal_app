@@ -1,11 +1,16 @@
 import { authApi } from "../api-service";
+import { USER_REGISTER } from "../../constant.js";
 
 const authServicesApi = authApi.injectEndpoints({
   endpoints: (build) => ({
-    example: build.query({
-      query: () => "test",
+    register: build.mutation({
+      query: (data) => ({
+        url: `${USER_REGISTER}`,
+        method: "POST",
+        body: data,
+      }),
     }),
   }),
 });
 
-export const { useExampleQuery } = authServicesApi;
+export const { useRegisterMutation } = authServicesApi;

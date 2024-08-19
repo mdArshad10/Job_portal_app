@@ -10,6 +10,9 @@ const {
 	updateTheProfile,
 } = require("../../controllers/user.controller.js");
 const upload = require("../../middlewares/multer.js");
+const {isAuthenticated} = require("../../middlewares/isAuthenticated.js")
+
+
 const router = Router();
 
 const fileUpload = upload.single("file");
@@ -25,5 +28,11 @@ router
 router
 	.route("/login")
 	.post(userLoginDataValidate, loginTheUser);
+
+router.route("/logout").get(isAuthenticated, logoutTheUser);
+
+router
+	.route("/profile/update")
+	.put(isAuthenticated, updateTheProfile);
 
 module.exports = router;

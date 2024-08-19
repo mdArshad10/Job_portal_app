@@ -4,7 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useRegisterMutation } from "../redux/Services/authServices.js";
+import { useDispatch } from "react-redux";
+import { setAuthUser } from "../redux/Slice/authSlice.js";
+import { toast } from "sonner";
 
 const Signup = () => {
   const [userInput, setUserInput] = useState({
@@ -16,6 +20,10 @@ const Signup = () => {
     file: "",
   });
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [register, { data, error }] = useRegisterMutation();
+
   const changeEventHandler = (e) => {
     setUserInput({ ...userInput, [e.target?.name]: e.target?.value });
   };
@@ -24,7 +32,7 @@ const Signup = () => {
     setUserInput({ ...userInput, file: e.target?.files[0] });
   };
 
-  const submitSignupHandler = (e) => {
+  const submitSignupHandler = async (e) => {
     e.preventDefault();
     console.log(userInput);
     const formData = new FormData();
@@ -33,8 +41,22 @@ const Signup = () => {
     formData.append("password", userInput.password);
     formData.append("phoneNumber", userInput.phoneNumber);
     formData.append("role", userInput.role);
-    if(userInput.file){
+    if (userInput.file) {
       formData.append("file", userInput.file);
+    }
+
+    try {
+      const response = await register(formData).unwrap();
+      console.log(response);
+      if (response.success) {
+        dispatch(setAuthUser(response.data));
+        navigate("/");
+      } else {
+        console.log(data);
+        toast(data);
+      }
+    } catch (error) {
+      toast(error.data?.data);
     }
   };
 
