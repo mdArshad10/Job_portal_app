@@ -140,7 +140,7 @@ const logoutTheUser = async (req, res, next) => {
 const updateTheProfile = async (req, res, next) => {
 	try {
 		const response = await UserService.updateUser(
-			req.body,
+			req
 		);
 		return res.status(StatusCodes.OK).json({
 			message: "update the profile",

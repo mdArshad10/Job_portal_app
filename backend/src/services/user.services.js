@@ -4,6 +4,7 @@ const fileUploadInCloudinary = require("../utils/cloudinary.js");
 const ErrorHandler = require("../utils/error.js");
 const { StatusCodes } = require("http-status-codes");
 
+
 class UserServices {
 	constructor() {
 		this.UserRepository = new UserRepository();
@@ -23,13 +24,11 @@ class UserServices {
 				10,
 			);
 			// Profile upload karna hai
-			console.log(req.file);
 
 			const fileUploadResponse =
 				await fileUploadInCloudinary(
 					req.file?.path,
 				);
-			console.log(fileUploadResponse);
 
 			if (!fileUploadResponse) {
 				throw new ErrorHandler(
@@ -67,7 +66,6 @@ class UserServices {
 
 	async login(data) {
 		try {
-			
 			const user =
 				await this.UserRepository.getByEmail(
 					data.email,
@@ -77,7 +75,7 @@ class UserServices {
 				user.password,
 			);
 			console.log(isMatchPassword);
-			
+
 			if (!isMatchPassword) {
 				throw new Error("invalid password");
 			}
@@ -99,10 +97,19 @@ class UserServices {
 		}
 	}
 
-	async updateUser(data) {
+	async updateUser(req) {
 		try {
-			const { userId } = req.user;
-			const file = req.file;
+			const {
+				fullName,
+				email,
+				phoneNumber,
+				bio,
+				skills,
+			} = req.body;
+			const userId = req.user;
+
+			console.log(req.file);
+			
 
 			const user = await this.UserRepository.getById(
 				userId,
@@ -110,14 +117,28 @@ class UserServices {
 			const skillsArray = skills.split(",");
 
 			// cloudinary ayega idhar
+			const resumeUploadResponse =
+				await fileUploadInCloudinary(
+					req.file?.path,
+				);
+
+			if (!resumeUploadResponse) {
+				throw new ErrorHandler(
+					false,
+					"resume is not upload",
+					StatusCodes.BAD_REQUEST,
+				);
+			}
 
 			// update skills array in user document
 			user.skills = skillsArray;
-			user.fullName = data.fullName;
-			user.email = data.email;
-			user.phoneNumber = data.phoneNumber;
-			user.profile.bio = data.bio;
+			user.fullName = fullName;
+			user.email = email;
+			user.phoneNumber = phoneNumber;
+			user.profile.bio = bio;
 			user.profile.skills = skillsArray;
+			user.profile.resume = resumeUploadResponse;
+			user.profile.resumeOriginalName = `${fullName}-resume-${user.updatedAt.toLocaleDateString()}`;
 
 			// update user document
 			const updatedUser = await user.save();

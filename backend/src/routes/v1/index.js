@@ -1,7 +1,8 @@
 const { Router } = require("express");
 const {
 	userRegisterDataValidate,
-	userLoginDataValidate
+	userLoginDataValidate,
+	userUpdateDataValidate,
 } = require("../../middlewares/Input-validator.js");
 const {
 	loginTheUser,
@@ -10,17 +11,20 @@ const {
 	updateTheProfile,
 } = require("../../controllers/user.controller.js");
 const upload = require("../../middlewares/multer.js");
-const {isAuthenticated} = require("../../middlewares/isAuthenticated.js")
-
+const {
+	isAuthenticated,
+} = require("../../middlewares/isAuthenticated.js");
 
 const router = Router();
 
-const fileUpload = upload.single("file");
+const fileUploadForAvatar = upload.single("file");
+const fileUploadForResume = upload.single("resume");
+
 // ======== user routes ========
 router
 	.route("/register")
 	.post(
-		fileUpload,
+		fileUploadForAvatar,
 		userRegisterDataValidate,
 		registerTheUser,
 	);
@@ -33,6 +37,11 @@ router.route("/logout").get(isAuthenticated, logoutTheUser);
 
 router
 	.route("/profile/update")
-	.put(isAuthenticated, updateTheProfile);
+	.put(
+		fileUploadForResume,
+		isAuthenticated,
+		userUpdateDataValidate,
+		updateTheProfile,
+	);
 
 module.exports = router;

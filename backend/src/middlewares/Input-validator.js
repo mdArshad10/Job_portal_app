@@ -70,31 +70,6 @@ const userRegisterDataValidate = [
 		.withMessage(
 			"Role must be either student or recruiter",
 		),
-
-	body("profile.bio").optional().trim().escape(),
-
-	body("profile.skills")
-		.optional()
-		.isArray()
-		.withMessage("Skills should be an array")
-		.customSanitizer(skills =>
-			skills.map(skill => skill.trim().escape()),
-		),
-
-	body("profile.resume").optional().trim(),
-
-	body("profile.resumeOriginalName")
-		.optional()
-		.trim()
-		.escape(),
-
-	body("profile.profilePhoto")
-		.optional()
-		.trim()
-		.isURL()
-		.withMessage("Profile photo must be a valid URL"),
-
-	
 ];
 
 const userLoginDataValidate = [
@@ -113,7 +88,7 @@ const userLoginDataValidate = [
 				throw new Error("E-mail is not valid");
 			}
 		}),
-		
+
 	body("password")
 		.trim()
 		.notEmpty()
@@ -149,7 +124,41 @@ const userLoginDataValidate = [
 		),
 ];
 
+const userUpdateDataValidate = [
+	body("fullName")
+		.trim()
+		.isLength({ min: 2 })
+		.withMessage(
+			"Full Name must be at least 2 characters long",
+		)
+		.escape(),
+
+	body("email")
+		.trim()
+		.isEmail()
+		.withMessage("Must be a valid email address")
+		.normalizeEmail()
+		.escape(),
+
+	body("phoneNumber")
+		.trim()
+		.isMobilePhone()
+		.withMessage("Must be a valid phone number")
+		.escape(),
+
+	body("bio")
+		.trim()
+		.isLength({ max: 300 })
+		.withMessage(
+			"Bio must be a length of max 300 characters",
+		)
+		.escape(),
+
+	body("skills").trim().escape(),
+];
+
 module.exports = {
 	userRegisterDataValidate,
 	userLoginDataValidate,
+	userUpdateDataValidate,
 };
