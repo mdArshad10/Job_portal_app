@@ -1,7 +1,11 @@
-const { body } = require("express-validator");
-const { UserRepository } = require("../repository");
+const { body, param } = require("express-validator");
+const {
+	CompanyRepository,
+	UserRepository,
+} = require("../repository");
 
 const user = new UserRepository();
+const company = new CompanyRepository();
 
 const userRegisterDataValidate = [
 	body("fullName")
@@ -28,7 +32,8 @@ const userRegisterDataValidate = [
 			if (existingUser) {
 				throw new Error("E-mail already in use");
 			}
-		}),
+		})
+		.escape(),
 	body("password")
 		.trim()
 		.notEmpty()
@@ -157,8 +162,35 @@ const userUpdateDataValidate = [
 	body("skills").trim().escape(),
 ];
 
+const companyRegisterDataValidate = [
+	body("companyName")
+		.trim()
+		.notEmpty()
+		.withMessage("Company Name must be required")
+		.custom(async value => {
+			try {
+				const existingCompany =
+					await company.getByData({
+						companyName: value,
+					});
+
+				console.log(existingCompany);
+
+				if (existingCompany.length == 0) {
+					throw new Error(
+						"Company already exist",
+					);
+				}
+			} catch (error) {
+				throw new Error(error);
+			}
+		})
+		.escape(),
+];
+
 module.exports = {
 	userRegisterDataValidate,
 	userLoginDataValidate,
 	userUpdateDataValidate,
+	companyRegisterDataValidate,
 };

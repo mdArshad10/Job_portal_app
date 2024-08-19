@@ -1,11 +1,8 @@
-class CrudRepository {
-	constructor(model) {
-		this.model = model;
-	}
-
-	async create(data) {
+const {Company} = require('../models');
+class CompanyRepository {
+	async creates(data) {
 		try {
-			const resp = await this.model.create(data);
+			const resp = await Company.create(data);
 			return resp;
 		} catch (error) {
 			console.log(
@@ -17,7 +14,7 @@ class CrudRepository {
 
 	async getByData(data) {
 		try {
-			const resp = await this.model.find(data);
+			const resp = await Company.find(data);
 			return resp;
 		} catch (error) {
 			console.log(
@@ -29,7 +26,7 @@ class CrudRepository {
 
 	async getAll() {
 		try {
-			const resp = await this.model.find({});
+			const resp = await Company.find({});
 			return resp;
 		} catch (error) {
 			console.log(
@@ -41,7 +38,7 @@ class CrudRepository {
 
 	async update(id, data) {
 		try {
-			const resp = await this.model.findByIdAndUpdate(
+			const resp = await Company.findByIdAndUpdate(
 				id,
 				data,
 				{ new: true },
@@ -56,4 +53,4 @@ class CrudRepository {
 	}
 }
 
-module.exports = CrudRepository;
+module.exports = CompanyRepository;

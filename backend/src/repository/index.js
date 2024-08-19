@@ -1,7 +1,11 @@
 const UserRepository = require("./user.repository");
-const CrudRepository = require("./crud.repository.js");
+const JobRepository = require("./job.repository.js");
+const CompanyRepository = require("./company.repository.js");
+const ApplicationRepository = require("./application.repository.js");
 
 module.exports = {
 	UserRepository,
-	CrudRepository,
+	JobRepository,
+	CompanyRepository,
+	ApplicationRepository,
 };

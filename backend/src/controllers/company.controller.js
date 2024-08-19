@@ -1,10 +1,60 @@
+const { StatusCodes } = require("http-status-codes");
 const { CompanyServices } = require("../services");
+const { validationResult } = require("express-validator");
+const ErrorHandler = require("../utils/error");
 
 const companyServices = new CompanyServices();
 
 // @DESCRIPTION: this is used for the registration the user
-// @METHOD: [POST]      /api/v1/register
+// @METHOD: [POST]      /api/v1/company/register
 // @ACCESS: public
-const createCompany = async (req, res, next) => {};
+const createCompany = async (req, res, next) => {
+	try {
+		const { errors } = validationResult(req);
 
-module.exports = { createCompany };
+		if (errors.length != 0) {
+			const message = errors.map(err => err.msg);
+			throw new ErrorHandler(
+				false,
+				"fill all the field",
+				StatusCodes.BAD_REQUEST,
+				errors,
+				message,
+			);
+		}
+
+		const response =
+			await companyServices.registerCompany(
+				req.body,
+				req.user,
+			);
+		return res.status(StatusCodes.CREATED).json({
+			success: true,
+			message: "your company register successfully",
+			data: response,
+			error: null,
+		});
+	} catch (error) {
+		console.log(
+			"some thing wrong with the controller layer",
+		);
+		console.log(error);
+		return res.status(StatusCodes.BAD_REQUEST).json({
+			success: false,
+			message:
+				"some thing wrong durring the register the company",
+			data: null,
+			error,
+		});
+	}
+};
+
+// @DESCRIPTION: this is used for the registration the user
+// @METHOD: [GET]      /api/v1/register
+// @ACCESS: public
+const getCompany = async (req, res, next) => {
+	try {
+	} catch (error) {}
+};
+
+module.exports = { createCompany, getCompany };

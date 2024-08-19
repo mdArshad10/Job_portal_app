@@ -1,12 +1,11 @@
 const { StatusCodes } = require("http-status-codes");
-const { Company } = require("../models");
-const { CrudRepository } = require("../repository");
+const { CompanyRepository } = require("../repository");
 const ErrorHandler = require("../utils/error");
 
-class CompanyServices extends CrudRepository {
+class CompanyServices {
 	constructor() {
-		const company = new Company();
-		super(company);
+		this.companyRepository = new CompanyRepository();
+		console.log(this.companyRepository);
 	}
 
 	async #findCompanyByName(name) {
@@ -23,23 +22,11 @@ class CompanyServices extends CrudRepository {
 
 	async registerCompany(data, userId) {
 		try {
-			let company = await this.#findCompanyByName(
-				data.name,
-			);
-			if (!company) {
-				throw new ErrorHandler(
-					false,
-					"No company found",
-					StatusCodes.BAD_REQUEST,
-					"company not found",
-					null,
-				);
-			}
-
-			company = await this.create({
-				name: data.companyName,
-				userId,
-			});
+			const company =
+				await this.companyRepository.creates({
+					name: data.companyName,
+					userId,
+				});
 			return company;
 		} catch (error) {
 			console.log(

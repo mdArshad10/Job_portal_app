@@ -3,6 +3,7 @@ const {
 	userRegisterDataValidate,
 	userLoginDataValidate,
 	userUpdateDataValidate,
+	companyRegisterDataValidate
 } = require("../../middlewares/Input-validator.js");
 const {
 	loginTheUser,
@@ -10,6 +11,8 @@ const {
 	registerTheUser,
 	updateTheProfile,
 } = require("../../controllers/user.controller.js");
+
+const {createCompany,getCompany} = require("../../controllers/company.controller.js")
 const upload = require("../../middlewares/multer.js");
 const {
 	isAuthenticated,
@@ -43,5 +46,26 @@ router
 		userUpdateDataValidate,
 		updateTheProfile,
 	);
+
+// ================= user routes End ==========
+
+// ======== Company routes ========
+router
+	.route("/company/register")
+	.post(
+		companyRegisterDataValidate,
+		isAuthenticated,
+		createCompany,
+	);
+
+// ======== Company routes End ========
+
+// ======== Application routes ========
+
+// ======== Application routes End ========
+
+// ======== Job routes ========
+
+// ======== Job routes End ========
 
 module.exports = router;

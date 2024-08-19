@@ -1,11 +1,8 @@
-const { Job } = require("../models");
-const { createIndexes } = require("../models/user.model");
-const { CrudRepository } = require("../repository");
+const { JobRepository } = require("../repository");
 
-class JobServices extends CrudRepository {
+class JobServices {
 	constructor() {
-		const job = new Job();
-		super(job);
+		this.jobRepository = new JobRepository();
 	}
 
 	async #findFilterJob(query) {

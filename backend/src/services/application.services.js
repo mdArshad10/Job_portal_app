@@ -1,14 +1,15 @@
 const { StatusCodes } = require("http-status-codes");
-const { Application } = require("../models");
-const { CrudRepository } = require("../repository");
-const { JobServices } = require("../services");
+const {
+	ApplicationRepository,
+	JobRepository,
+} = require("../repository");
 const ErrorHandler = require("../utils/error");
 
-class ApplicationServices extends CrudRepository {
+class ApplicationServices {
 	constructor() {
-		const application = new Application();
-		const jobs = new JobServices();
-		super(application);
+		this.applicationRepository =
+			new ApplicationRepository();
+		this.jobRepository = new JobRepository();
 	}
 
 	async #findApplicationByJobIdOrUserId(jobId, userId) {
@@ -65,9 +66,6 @@ class ApplicationServices extends CrudRepository {
 			throw error;
 		}
 	}
-
-
-
 }
 
 module.exports = ApplicationServices;
