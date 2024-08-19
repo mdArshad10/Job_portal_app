@@ -188,9 +188,19 @@ const companyRegisterDataValidate = [
 		.escape(),
 ];
 
+const getCompanyByIdDataValidate = [
+	param("id")
+		.notEmpty()
+		.withMessage("company id is must be required")
+		.isMongoId()
+		.withMessage("invalid company id")
+		.escape(),
+];
+
 module.exports = {
 	userRegisterDataValidate,
 	userLoginDataValidate,
 	userUpdateDataValidate,
 	companyRegisterDataValidate,
+	getCompanyByIdDataValidate,
 };

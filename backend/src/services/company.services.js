@@ -48,9 +48,27 @@ class CompanyServices {
 	// we get the company by two ways
 	// 1. by user id
 	// 2. by req.params
-	async getCompany(userId) {
+	async getCompanyByUserId(userId) {
 		try {
-			const company = await this.getById(userId);
+			const company =
+				await this.companyRepository.getByUserId(
+					userId,
+				);
+			return company;
+		} catch (error) {
+			console.log(
+				"some thing wrong with getCompany",
+				error,
+			);
+			throw error;
+		}
+	}
+
+	async getCompanyUsingCompanyId(id) {
+		try {
+			const company = await this.companyRepository.getById(id);
+			console.log(company);
+			
 			return company;
 		} catch (error) {
 			console.log(

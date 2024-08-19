@@ -1,4 +1,4 @@
-const {Company} = require('../models');
+const { Company } = require("../models");
 class CompanyRepository {
 	async creates(data) {
 		try {
@@ -12,9 +12,21 @@ class CompanyRepository {
 		}
 	}
 
-	async getByData(data) {
+	async getById(id) {
 		try {
-			const resp = await Company.find(data);
+			const resp = await Company.findById(id);
+			return resp;
+		} catch (error) {
+			console.log(
+				"something wrong on crud repository",
+			);
+			throw error;
+		}
+	}
+
+	async getByUserId(userId) {
+		try {
+			const resp = await Company.find({ userId });
 			return resp;
 		} catch (error) {
 			console.log(

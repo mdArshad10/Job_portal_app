@@ -3,7 +3,8 @@ const {
 	userRegisterDataValidate,
 	userLoginDataValidate,
 	userUpdateDataValidate,
-	companyRegisterDataValidate
+	companyRegisterDataValidate,
+	getCompanyByIdDataValidate,
 } = require("../../middlewares/Input-validator.js");
 const {
 	loginTheUser,
@@ -12,7 +13,11 @@ const {
 	updateTheProfile,
 } = require("../../controllers/user.controller.js");
 
-const {createCompany,getCompany} = require("../../controllers/company.controller.js")
+const {
+	createCompany,
+	getCompany,
+	getCompanyById,
+} = require("../../controllers/company.controller.js");
 const upload = require("../../middlewares/multer.js");
 const {
 	isAuthenticated,
@@ -57,6 +62,19 @@ router
 		isAuthenticated,
 		createCompany,
 	);
+// get company by the user id
+router.route("/company").get(isAuthenticated, getCompany);
+
+// get company by company id
+router
+	.route("/company/:id")
+	.get(
+		getCompanyByIdDataValidate,
+		isAuthenticated,
+		getCompanyById,
+	);
+
+// update the company
 
 // ======== Company routes End ========
 
