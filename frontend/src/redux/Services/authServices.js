@@ -1,5 +1,5 @@
 import { authApi } from "../api-service";
-import { USER_REGISTER } from "../../constant.js";
+import { USER_REGISTER,USER_LOGIN } from "../../constant.js";
 
 const authServicesApi = authApi.injectEndpoints({
   endpoints: (build) => ({
@@ -10,7 +10,14 @@ const authServicesApi = authApi.injectEndpoints({
         body: data,
       }),
     }),
+    login: build.mutation({
+      query: (data) => ({
+        url: `${USER_LOGIN}`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useRegisterMutation } = authServicesApi;
+export const { useRegisterMutation,useLoginMutation } = authServicesApi;

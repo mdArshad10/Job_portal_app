@@ -22,7 +22,7 @@ const Signup = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [register, { data, error }] = useRegisterMutation();
+  const [register, { data }] = useRegisterMutation();
 
   const changeEventHandler = (e) => {
     setUserInput({ ...userInput, [e.target?.name]: e.target?.value });

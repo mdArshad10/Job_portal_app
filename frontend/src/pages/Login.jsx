@@ -4,7 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../redux/Services/authServices";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
+import { setAuthUser } from "../redux/Slice/authSlice.js";
 
 const Login = () => {
   const [userInput, setUserInput] = useState({
@@ -13,15 +17,32 @@ const Login = () => {
     role: "",
   });
 
+  const [login, {data}] = useLoginMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const submitEventHandler = (e) => {
     setUserInput({ ...userInput, [e.target?.name]: e.target?.value });
   };
 
-  const submitLoginHandler = (e) => {
+  const submitLoginHandler = async (e) => {
     e.preventDefault();
     // Perform login logic here
     console.log("Login form submitted");
-    console.log(userInput);
+    try {
+      const response = await login(userInput).unwrap();
+      toast(response.message, {
+        action: {
+          label: "close",
+          onClick: () => console.log("Undo"),
+        },
+      });
+      dispatch(setAuthUser(response));
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      toast(error.data.data);
+    }
   };
   return (
     <>
