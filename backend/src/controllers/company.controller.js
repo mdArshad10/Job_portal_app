@@ -122,9 +122,36 @@ const getCompanyById = async (req, res, next) => {
 	}
 };
 
+// @DESCRIPTION: the update the company details
+// @METHOD: [PUT]      /api/v1/company/:id
+// @ACCESS: private
+const updateCompanyDetails = async(req,res,next)=>{
+	try {
+		const { errors } = validationResult(req);
+
+		if (errors.length != 0) {
+			const message = errors.map(err => err.msg);
+			throw new ErrorHandler(
+				false,
+				"fill all the field",
+				StatusCodes.BAD_REQUEST,
+				errors,
+				message,
+			);
+		}
+
+		const response =
+			await companyServices.updateCompanyDetail(req.body, req.params.id,req.file);
+
+	} catch (error) {
+		
+	}
+}
+
 module.exports = {
 	createCompany,
 	getCompany,
 	getCompany,
 	getCompanyById,
+	updateCompanyDetails,
 };

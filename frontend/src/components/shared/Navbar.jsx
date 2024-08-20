@@ -6,9 +6,9 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Navbar = () => {
-  const user =useSelector(store=>store.user);
+  const user = useSelector((store) => store.user);
   console.log(user);
-  
+
   return (
     <div className="bg-white border border-gray-300">
       <div className="flex flex-row justify-between items-center mx-auto max-w-7xl h-16">
@@ -19,15 +19,28 @@ const Navbar = () => {
         </div>
         <div className="flex flex-row gap-5 items-center">
           <ul className="flex font-medium items-center gap-5">
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/jobs">Jobs</Link>
-            </li>
-            <li>
-              <Link to="/browse">Browse</Link>
-            </li>
+            {user && user.role === "recruiter" ? (
+              <>
+                <li>
+                  <Link to="/admin/companies">Home</Link>
+                </li>
+                <li>
+                  <Link to="/jobs">Jobs</Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="/jobs">Jobs</Link>
+                </li>
+                <li>
+                  <Link to="/browse">Browse</Link>
+                </li>
+              </>
+            )}
           </ul>
 
           {user ? (
@@ -57,14 +70,17 @@ const Navbar = () => {
                   </div>
                 </div>
                 <div className="my-2">
-                  <div className="flex gap-1 items-center">
-                    <Link to="/profile">
-                      <Button variant="link">
-                        <User2 className="mr-2" />
-                        View Profile
-                      </Button>
-                    </Link>
-                  </div>
+                  {user && user.role === "student" ? (
+                    <div className="flex gap-1 items-center">
+                      <Link to="/profile">
+                        <Button variant="link">
+                          <User2 className="mr-2" />
+                          View Profile
+                        </Button>
+                      </Link>
+                    </div>
+                  ) : null}
+
                   <div className="flex gap-1 items-center">
                     <Link>
                       <Button variant="link">

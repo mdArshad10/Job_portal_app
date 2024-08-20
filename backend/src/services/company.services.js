@@ -66,9 +66,10 @@ class CompanyServices {
 
 	async getCompanyUsingCompanyId(id) {
 		try {
-			const company = await this.companyRepository.getById(id);
+			const company =
+				await this.companyRepository.getById(id);
 			console.log(company);
-			
+
 			return company;
 		} catch (error) {
 			console.log(
@@ -79,10 +80,28 @@ class CompanyServices {
 		}
 	}
 
-	async updateCompanyDetail(data, userGetIdByParams) {
+	async updateCompanyDetail(
+		data,
+		userGetIdByParams,
+		file,
+	) {
 		try {
-			const file = req.file;
 			// idhar cloudinary ayega
+			const fileUploadResponse =
+				await fileUploadInCloudinary(file?.path);
+
+			if (!fileUploadResponse) {
+				throw new ErrorHandler(
+					false,
+					"file is not upload",
+					StatusCodes.BAD_REQUEST,
+				);
+			}
+			data = {
+				...data,
+				logo: fileUploadResponse,
+				userId: userGetIdByParams,
+			};
 
 			const company = await this.update(
 				userGetIdByParams,

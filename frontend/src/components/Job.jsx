@@ -7,10 +7,17 @@ import { useNavigate } from "react-router-dom";
 const Job = () => {
   const navigate = useNavigate();
   const jobId ="jhad;jad;fajdldljfdajf"
+
+  const daysAgoFunction = (mongodbTime)=>{
+    const createAt = new Date(mongodbTime);
+    const now = new Date();
+    const timeDifference = createAt.getDay() - now.getDay();
+    return timeDifference;
+  }
   return (
     <div className="p-5 rounded-md shadow-xl bg-white border border-gray-200 ">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-500">2 day ago</p>
+        <p className="text-sm text-gray-500">{timeDifference} day ago</p>
         <Button variant="outline" className="rounded-full" size="icon">
           <Bookmark />
         </Button>
