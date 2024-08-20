@@ -1,4 +1,4 @@
-const {Application} = require('../models');
+const { Application } = require("../models");
 
 class ApplicationRepository {
 	async creates(data) {
@@ -50,6 +50,21 @@ class ApplicationRepository {
 			console.log(
 				"something wrong on crud repository",
 			);
+			throw error;
+		}
+	}
+
+	async findApplicationBasedOnUserIdAndJobId(
+		userId,
+		jobId,
+	) {
+		try {
+			const resp = await Application.findOne({
+				job: jobId,
+				application: userId,
+			});
+			return resp;
+		} catch (error) {
 			throw error;
 		}
 	}

@@ -100,7 +100,6 @@ class CompanyServices {
 			data = {
 				...data,
 				logo: fileUploadResponse,
-				userId: userGetIdByParams,
 			};
 
 			const company = await this.update(

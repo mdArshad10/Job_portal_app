@@ -10,13 +10,15 @@ const jobSchema = new mongoose.Schema(
 			type: String,
 			required: [true, "job description is required"],
 		},
-		requirements: {
-			type: String,
-			required: [
-				true,
-				"job requirements is required",
-			],
-		},
+		requirements: [
+			{
+				type: String,
+				required: [
+					true,
+					"job requirements is required",
+				],
+			},
+		],
 		salary: {
 			type: Number,
 			required: true,
@@ -28,6 +30,7 @@ const jobSchema = new mongoose.Schema(
 		jobType: {
 			type: String,
 			required: [true, "job types is required"],
+			enum: ["part-time", "full-time", "internship"],
 		},
 		experienceLevel: {
 			type: Number,

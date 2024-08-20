@@ -5,33 +5,6 @@ class JobServices {
 		this.jobRepository = new JobRepository();
 	}
 
-	async #findFilterJob(query) {
-		try {
-			const jobs = await job
-				.find(query)
-				.populate({ path: "company" })
-				.sort({ createdAt: -1 });
-			return jobs;
-		} catch (error) {
-			console.log("some thing wrong with job filter");
-			throw error;
-		}
-	}
-
-	async #getAdminCreatedJob(adminId) {
-		try {
-			const jobs = await job.find({
-				created_by: adminId,
-			});
-			return jobs;
-		} catch (error) {
-			console.log(
-				"some thing worng with admin job creationg",
-			);
-			throw error;
-		}
-	}
-
 	async postJob(data, userId) {
 		// data validation and data sanitization
 		try {
@@ -42,10 +15,10 @@ class JobServices {
 				location,
 				jobType,
 				position,
-				company,
+				experienceLevel,
 				salary,
 				experience,
-				created_by,
+				companyId,
 			} = data;
 
 			const jobs = await this.create({
@@ -55,7 +28,8 @@ class JobServices {
 				location,
 				jobType,
 				position,
-				company,
+				experienceLevel,
+				company: companyId,
 				salary: Number(salary),
 				experienceLevel: experience,
 				created_by: userId,
@@ -85,7 +59,13 @@ class JobServices {
 					},
 				],
 			};
-			const jobs = await this.#findFilterJob(query);
+			const jobs =
+				await this.jobRepository.findFilterJob(
+					query,
+				);
+			if (jobs.length == 0) {
+				throw new Error("No jobs found");
+			}
 			return jobs;
 		} catch (error) {
 			console.log("some wrong with get all jobs");
@@ -95,7 +75,10 @@ class JobServices {
 
 	async getJobByUsingJobId(jobId) {
 		try {
-			const response = await this.getById(jobId);
+			const response =
+				await this.jobRepository.getByData({
+					_id: jobId,
+				});
 			return response;
 		} catch (error) {
 			throw error;
@@ -104,8 +87,8 @@ class JobServices {
 
 	async getJobWhichIsCreateByAdmin(adminId) {
 		try {
-			const jobs = await this.#getAdminCreatedJob(
-				adminId,
+			const jobs = await this.jobRepository.getByData(
+				{ created_by: adminId },
 			);
 			return jobs;
 		} catch (error) {

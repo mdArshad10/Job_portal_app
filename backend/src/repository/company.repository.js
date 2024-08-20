@@ -36,6 +36,18 @@ class CompanyRepository {
 		}
 	}
 
+	async getCompanyByName(name){
+		try {
+            const resp = await Company.findOne({ name });
+            return resp;
+        } catch (error) {
+            console.log(
+                "something wrong on crud repository",
+            );
+            throw error;
+        }
+	}
+
 	async getAll() {
 		try {
 			const resp = await Company.find({});

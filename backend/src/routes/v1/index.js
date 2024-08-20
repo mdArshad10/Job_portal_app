@@ -5,7 +5,10 @@ const {
 	userUpdateDataValidate,
 	companyRegisterDataValidate,
 	getCompanyByIdDataValidate,
+	updateCompanyDataValidate,
+	createJobDataValidate,
 } = require("../../middlewares/Input-validator.js");
+
 const {
 	loginTheUser,
 	logoutTheUser,
@@ -17,7 +20,16 @@ const {
 	createCompany,
 	getCompany,
 	getCompanyById,
+	updateCompanyDetails,
 } = require("../../controllers/company.controller.js");
+
+const {
+	createJob,
+	getAllJobs,
+	adminCreatedJobs,
+	getJobByJobId,
+} = require("../../controllers/job.controller.js");
+
 const upload = require("../../middlewares/multer.js");
 const {
 	isAuthenticated,
@@ -72,17 +84,35 @@ router
 		getCompanyByIdDataValidate,
 		isAuthenticated,
 		getCompanyById,
+	)
+	// update the company
+	.put(
+		updateCompanyDataValidate,
+		isAuthenticated,
+		updateCompanyDetails,
 	);
-
-// update the company
 
 // ======== Company routes End ========
 
 // ======== Application routes ========
 
+
 // ======== Application routes End ========
 
 // ======== Job routes ========
+router
+	.route("/job/create")
+	.post(isAuthenticated, createJob);
+
+router.route("/jobs").get(isAuthenticated, getAllJobs);
+
+router
+	.route("/jobs/:id")
+	.get(isAuthenticated, getJobByJobId);
+
+router
+	.route("/jobs/admin")
+	.get(isAuthenticated, adminCreatedJobs);
 
 // ======== Job routes End ========
 

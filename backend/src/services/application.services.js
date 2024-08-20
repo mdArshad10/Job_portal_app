@@ -12,52 +12,44 @@ class ApplicationServices {
 		this.jobRepository = new JobRepository();
 	}
 
-	async #findApplicationByJobIdOrUserId(jobId, userId) {
-		try {
-			const response = await this.application.find({
-				job: jobId,
-				userId: userId,
-			});
-			return response;
-		} catch (error) {
-			console.log(
-				"some error on findApplicationByJobIdOrUserId",
-			);
-			throw error;
-		}
-	}
-
-	async applyForNewJob(data, userId, jobId) {
+	async applyForNewJob(userId, jobId) {
 		try {
 			const existingApplication =
-				await this.#findApplicationByJobIdOrUserId(
-					jobId,
+				await this.applicationRepository.findApplicationBasedOnUserIdAndJobId(
 					userId,
+					jobId,
 				);
-			if (!existingApplication) {
+			if (existingApplication) {
 				throw new ErrorHandler(
-					false,
-					"you have already apply for this job",
-					StatusCodes.BAD_REQUEST,
+					StatusCodes.CONFLICT,
+					"You have already applied for this job",
 				);
 			}
-
-			// check the job is present or not by job id
-			const job = await this.jobs.getById(userId);
+			let job = await this.jobRepository.findJobById(
+				jobId,
+			);
 			if (!job) {
 				throw new ErrorHandler(
 					false,
-					"No job found",
-					StatusCodes.BAD_REQUEST,
+					"Job not found",
+					StatusCodes.CONFLICT,
 				);
 			}
-			const newApplication = await this.create({
-				job: jobId,
-				application: userId,
-			});
-			job.application.push(newApplication._id);
-			await this.job.save();
-			return true;
+			const response =
+				await this.jobRepository.creates({
+					job: jobId,
+					application: userId,
+				});
+			const data = {
+				...job,
+				applications: [
+					...job.applications,
+					response._id,
+				],
+			};
+
+			await this.jobRepository.update(jobId, data);
+			return response;
 		} catch (error) {
 			console.log(
 				"some error on applyForNewJob",
