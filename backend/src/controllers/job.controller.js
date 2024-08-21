@@ -1,5 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const { JobServices } = require("../services");
+const { validationResult } = require("express-validator");
 
 const jobServices = new JobServices();
 
@@ -8,11 +9,24 @@ const jobServices = new JobServices();
 // @ACCESS: private
 const createJob = async (req, res, next) => {
 	try {
+		const { errors } = validationResult(req);
+
+		if (errors.length != 0) {
+			const message = errors.map(err => err.msg);
+			throw new ErrorHandler(
+				false,
+				"fill all the field",
+				StatusCodes.BAD_REQUEST,
+				errors,
+				message,
+			);
+		}
+
 		const response = await jobServices.postJob(
-			data,
+			req.body,
 			req.user,
 		);
-		return response.status(StatusCodes.CREATED).json({
+		return res.status(StatusCodes.CREATED).json({
 			success: true,
 			message: "Job created successfully",
 			data: response,
@@ -34,8 +48,8 @@ const createJob = async (req, res, next) => {
 // @ACCESS: private
 const getAllJobs = async (req, res, next) => {
 	try {
-		const response = await JobServices.getAllJobs(req);
-		return response.status(StatusCodes.OK).json({
+		const response = await jobServices.getAllJobs(req);
+		return res.status(StatusCodes.OK).json({
 			success: true,
 			message: "you get all jobs",
 			data: response,
@@ -63,14 +77,20 @@ const getJobByJobId = async (req, res, next) => {
 			await jobServices.getJobByUsingJobId(
 				req.params.id,
 			);
-		return response.status(StatusCodes.OK).json({
+		return res.status(StatusCodes.OK).json({
 			success: true,
 			message: "you get job by id",
 			data: response,
 			error: null,
 		});
 	} catch (error) {
-		console.log("there is not ");
+		console.log("some thing wrong with getJobByJobId");
+		return res.status(StatusCodes.BAD_REQUEST).json({
+			success: false,
+			message: "some thing wrong with get Job By id",
+			data: null,
+			error,
+		});
 	}
 };
 

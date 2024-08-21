@@ -60,7 +60,7 @@ const getCompany = async (req, res, next) => {
 			);
 		return res.status(StatusCodes.OK).json({
 			success: true,
-			message: `your are the owner of ${resp.name}`,
+			message: `list of your company`,
 			data: resp,
 			error: null,
 		});
@@ -84,6 +84,8 @@ const getCompany = async (req, res, next) => {
 // @ACCESS: public
 const getCompanyById = async (req, res, next) => {
 	try {
+		console.log(req.params.id);
+
 		const { errors } = validationResult(req);
 
 		if (errors.length != 0) {
@@ -96,6 +98,9 @@ const getCompanyById = async (req, res, next) => {
 				message,
 			);
 		}
+		console.log(
+			"this is inside the get company by company id",
+		);
 
 		const response =
 			await companyServices.getCompanyUsingCompanyId(
@@ -125,28 +130,45 @@ const getCompanyById = async (req, res, next) => {
 // @DESCRIPTION: the update the company details
 // @METHOD: [PUT]      /api/v1/company/:id
 // @ACCESS: private
-const updateCompanyDetails = async(req,res,next)=>{
+const updateCompanyDetails = async (req, res, next) => {
 	try {
-		const { errors } = validationResult(req);
+		console.log(req.body);
 
-		if (errors.length != 0) {
-			const message = errors.map(err => err.msg);
-			throw new ErrorHandler(
-				false,
-				"fill all the field",
-				StatusCodes.BAD_REQUEST,
-				errors,
-				message,
-			);
-		}
+		// const { errors } = validationResult(req);
+
+		// if (errors.length != 0) {
+		// 	const message = errors.map(err => err.msg);
+		// 	throw new ErrorHandler(
+		// 		false,
+		// 		"fill all the field",
+		// 		StatusCodes.BAD_REQUEST,
+		// 		errors,
+		// 		message,
+		// 	);
+		// }
 
 		const response =
-			await companyServices.updateCompanyDetail(req.body, req.params.id,req.file);
-
+			await companyServices.updateCompanyDetail(
+				req.body,
+				req.params.id,
+				req.file,
+			);
+		return res.status(StatusCodes.OK).json({
+			success: true,
+			message:
+				"your company details updated successfully",
+			data: response,
+			error: null,
+		});
 	} catch (error) {
-		
+		return res.status(StatusCodes.BAD_REQUEST).json({
+			success: false,
+			message: error.message,
+			data: null,
+			error,
+		});
 	}
-}
+};
 
 module.exports = {
 	createCompany,

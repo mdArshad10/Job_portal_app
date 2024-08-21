@@ -37,7 +37,7 @@ const jobSchema = new mongoose.Schema(
 			required: true,
 		},
 		position: {
-			type: String,
+			type: Number,
 			required: [true, "job position is required"],
 		},
 		company: [

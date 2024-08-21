@@ -31,10 +31,9 @@ const generateToken = userId => {
 const registerTheUser = async (req, res, next) => {
 	try {
 		const { errors } = validationResult(req);
-		
 
 		if (errors.length != 0) {
-			const message = errors.map(err=>err.msg)
+			const message = errors.map(err => err.msg);
 			throw new ErrorHandler(
 				false,
 				"fill all the field",
@@ -44,16 +43,17 @@ const registerTheUser = async (req, res, next) => {
 			);
 		}
 		// file
-		
-		
 
 		const user = await UserService.register(req);
-		res.status(StatusCodes.CREATED).json({
-			success: true,
-			message: "Account created successfully",
-			data: user,
-			err: null,
-		});
+		const token = generateToken(user._id);
+		res.status(StatusCodes.CREATED)
+			.cookie("token", token, cookieOptions)
+			.json({
+				success: true,
+				message: "Account created successfully",
+				data: user,
+				err: null,
+			});
 	} catch (error) {
 		return res.status(StatusCodes.BAD_REQUEST).json({
 			data: error.data,
@@ -69,18 +69,18 @@ const registerTheUser = async (req, res, next) => {
 // @ACCESS: public
 const loginTheUser = async (req, res, next) => {
 	try {
-			const { errors } = validationResult(req);
+		const { errors } = validationResult(req);
 
-			if (errors.length != 0) {
-				const message = errors.map(err => err.msg);
-				throw new ErrorHandler(
-					false,
-					"fill all the field",
-					StatusCodes.BAD_REQUEST,
-					errors,
-					message,
-				);
-			}
+		if (errors.length != 0) {
+			const message = errors.map(err => err.msg);
+			throw new ErrorHandler(
+				false,
+				"fill all the field",
+				StatusCodes.BAD_REQUEST,
+				errors,
+				message,
+			);
+		}
 
 		const response = await UserService.login(req.body);
 		console.log(response);
@@ -139,9 +139,20 @@ const logoutTheUser = async (req, res, next) => {
 // @ACCESS: private
 const updateTheProfile = async (req, res, next) => {
 	try {
-		const response = await UserService.updateUser(
-			req
-		);
+		const { errors } = validationResult(req);
+
+		if (errors.length != 0) {
+			const message = errors.map(err => err.msg);
+			throw new ErrorHandler(
+				false,
+				"fill all the field",
+				StatusCodes.BAD_REQUEST,
+				errors,
+				message,
+			);
+		}
+
+		const response = await UserService.updateUser(req);
 		return res.status(StatusCodes.OK).json({
 			message: "update the profile",
 			success: true,

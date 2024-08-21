@@ -36,12 +36,12 @@ class ApplicationServices {
 				);
 			}
 			const response =
-				await this.jobRepository.creates({
+				await this.applicationRepository.creates({
 					job: jobId,
 					application: userId,
 				});
 			const data = {
-				...job,
+				...job._doc,
 				applications: [
 					...job.applications,
 					response._id,
@@ -53,6 +53,65 @@ class ApplicationServices {
 		} catch (error) {
 			console.log(
 				"some error on applyForNewJob",
+				error,
+			);
+			throw error;
+		}
+	}
+
+	async getAppliedJobs(userId) {
+		try {
+			const applications =
+				await this.applicationRepository.getByData({
+					application: userId,
+				});
+			console.log(!applications);
+
+			if (!applications) {
+				throw new Error("Applications not found");
+			}
+			return applications;
+		} catch (error) {
+			console.log(error);
+
+			console.log(
+				"some thing wrong with getAppliedJobs",
+			);
+			throw error;
+		}
+	}
+
+	async getApplicants(jobId) {
+		try {
+			const jobs =
+				await this.jobRepository.findFilterJobPopulate(
+					jobId,
+				);
+			if (!jobs) {
+				throw new ErrorHandler(
+					false,
+					"Job not found",
+					StatusCodes.NOT_FOUND,
+				);
+			}
+			return jobs;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
+
+	async applicationStatus(status, applicationId) {
+		try {
+			const applications =
+				await this.applicationRepository.update(
+					applicationId,
+					{ status },
+				);
+			return applications;
+		} catch (error) {
+			console.log(
+				"some thing wrong with applicationStatus",
 				error,
 			);
 			throw error;

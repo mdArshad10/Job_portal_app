@@ -134,6 +134,8 @@ const userLoginDataValidate = [
 const userUpdateDataValidate = [
 	body("fullName")
 		.trim()
+		.notEmpty()
+		.withMessage("Full Name is required")
 		.isLength({ min: 2 })
 		.withMessage(
 			"Full Name must be at least 2 characters long",
@@ -142,6 +144,8 @@ const userUpdateDataValidate = [
 
 	body("email")
 		.trim()
+		.notEmpty()
+		.withMessage("Email is required")
 		.isEmail()
 		.withMessage("Must be a valid email address")
 		.normalizeEmail()
@@ -149,19 +153,27 @@ const userUpdateDataValidate = [
 
 	body("phoneNumber")
 		.trim()
+		.notEmpty()
+		.withMessage("Phone number is required")
 		.isMobilePhone()
 		.withMessage("Must be a valid phone number")
 		.escape(),
 
 	body("bio")
 		.trim()
+		.notEmpty()
+		.withMessage("Bio is required")
 		.isLength({ max: 300 })
 		.withMessage(
 			"Bio must be a length of max 300 characters",
 		)
 		.escape(),
 
-	body("skills").trim().escape(),
+	body("skills")
+		.trim()
+		.notEmpty()
+		.withMessage("Skills is required")
+		.escape(),
 ];
 
 const companyRegisterDataValidate = [
@@ -172,13 +184,11 @@ const companyRegisterDataValidate = [
 		.custom(async value => {
 			try {
 				const existingCompany =
-					await company.getByData({
-						companyName: value,
-					});
+					await company.getCompanyByName(value);
 
 				console.log(existingCompany);
 
-				if (existingCompany.length == 0) {
+				if (existingCompany) {
 					throw new Error(
 						"Company already exist",
 					);
@@ -201,7 +211,6 @@ const getCompanyByIdDataValidate = [
 
 const updateCompanyDataValidate = [
 	body("name")
-		.trim()
 		.optional()
 		.isLength({ min: 2 })
 		.withMessage(
@@ -211,12 +220,16 @@ const updateCompanyDataValidate = [
 			try {
 				const existingCompany =
 					await company.getCompanyByName(value);
-				if (existingCompany) {
+				console.log(existingCompany);
+
+				if (existingCompany.length !== 0) {
 					throw new Error(
 						"Company already exist",
 					);
 				}
 			} catch (error) {
+				console.log("inside the input-validator");
+
 				throw new Error(
 					"some thing wrong with input-validator",
 				);
@@ -224,13 +237,23 @@ const updateCompanyDataValidate = [
 		})
 		.escape(),
 
-	body("description").trim().optional().escape(),
+	body("description")
+		.trim()
+		.notEmpty()
+		.withMessage("company description is required")
+		.escape(),
 
-	body("location").trim().optional().escape(),
+	body("location")
+		.trim()
+		.notEmpty()
+		.withMessage("company location is required")
+		.escape(),
 
-	body("website").trim().optional().escape(),
-
-	body("location").trim().optional().escape(),
+	body("website")
+		.trim()
+		.notEmpty()
+		.withMessage("company website is required")
+		.escape(),
 
 	param("id")
 		.notEmpty()
@@ -259,6 +282,7 @@ const createJobDataValidate = [
 		.notEmpty()
 		.withMessage("Title is required")
 		.escape(),
+
 	body("description")
 		.trim()
 		.notEmpty()
@@ -290,7 +314,7 @@ const createJobDataValidate = [
 			"Job Type must be either full-time, part-time or internship",
 		)
 		.escape(),
-	body("experienceLevel")
+	body("experience")
 		.trim()
 		.notEmpty()
 		.withMessage("Experience Level is required")

@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const { accessSecretKey } = require("../constant.js");
+const UserRepository = require("../repository/user.repository.js");
 
 const isAuthenticated = (req, res, next) => {
 	try {
@@ -44,4 +45,23 @@ const isAuthenticated = (req, res, next) => {
 	}
 };
 
-module.exports = { isAuthenticated };
+const isAdmin = async (req, res, next) => {
+	const userRepository = new UserRepository();
+	try {
+		const user = await userRepository.getById(req.user);
+		if (user?.role !== "recruiter") {
+			throw new Error(
+				"your are not allowed to access this route",
+			);
+		}
+		next();
+	} catch (error) {
+		console.log(
+			"some thing wrong with isAdmin middleware",
+		);
+		throw new Error(
+			"some thing wrong with admin panel",
+		);
+	}
+};
+module.exports = { isAuthenticated, isAdmin };

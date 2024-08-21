@@ -15,20 +15,18 @@ class JobServices {
 				location,
 				jobType,
 				position,
-				experienceLevel,
 				salary,
 				experience,
 				companyId,
 			} = data;
 
-			const jobs = await this.create({
+			const jobs = await this.jobRepository.creates({
 				title,
 				description,
 				requirements: requirements.split(","),
 				location,
 				jobType,
-				position,
-				experienceLevel,
+				position: Number(position),
 				company: companyId,
 				salary: Number(salary),
 				experienceLevel: experience,
@@ -36,6 +34,8 @@ class JobServices {
 			});
 			return jobs;
 		} catch (error) {
+			console.log("something wrong with posting job");
+
 			throw error;
 		}
 	}

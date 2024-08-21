@@ -24,6 +24,13 @@ const {
 } = require("../../controllers/company.controller.js");
 
 const {
+	createJobApplication,
+	getAppliedJobs,
+	getApplicant,
+	updateStatus,
+} = require("../../controllers/application.controller.js");
+
+const {
 	createJob,
 	getAllJobs,
 	adminCreatedJobs,
@@ -33,11 +40,13 @@ const {
 const upload = require("../../middlewares/multer.js");
 const {
 	isAuthenticated,
+	isAdmin,
 } = require("../../middlewares/isAuthenticated.js");
 
 const router = Router();
 
 const fileUploadForAvatar = upload.single("file");
+const fileUploadForWebsiteLogo = upload.single("file");
 const fileUploadForResume = upload.single("resume");
 
 // ======== user routes ========
@@ -87,7 +96,8 @@ router
 	)
 	// update the company
 	.put(
-		updateCompanyDataValidate,
+		// updateCompanyDataValidate,
+		fileUploadForWebsiteLogo,
 		isAuthenticated,
 		updateCompanyDetails,
 	);
@@ -95,14 +105,31 @@ router
 // ======== Company routes End ========
 
 // ======== Application routes ========
+router
+	.route("/apply/:id")
+	.post(isAuthenticated, createJobApplication);
 
+router
+	.route("/appliedJobs")
+	.get(isAuthenticated, getAppliedJobs);
+
+router
+	.route("/:id/applicants")
+	.get(isAuthenticated, getApplicant);
+
+router.route("/status/:id/update")
+    .put(isAuthenticated, updateStatus);
 
 // ======== Application routes End ========
 
 // ======== Job routes ========
 router
 	.route("/job/create")
-	.post(isAuthenticated, createJob);
+	.post(
+		createJobDataValidate,
+		isAuthenticated,
+		createJob,
+	);
 
 router.route("/jobs").get(isAuthenticated, getAllJobs);
 
@@ -112,7 +139,7 @@ router
 
 router
 	.route("/jobs/admin")
-	.get(isAuthenticated, adminCreatedJobs);
+	.get(isAuthenticated, isAdmin, adminCreatedJobs);
 
 // ======== Job routes End ========
 

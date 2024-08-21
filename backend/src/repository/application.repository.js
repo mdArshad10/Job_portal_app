@@ -15,7 +15,15 @@ class ApplicationRepository {
 
 	async getByData(data) {
 		try {
-			const resp = await Application.find(data);
+			const resp = await Application.find(data)
+				.sort({ createdAt: -1 })
+				.populate({
+					path: "job",
+					options: { sort: { createdAt: -1 } },
+					populate: {
+						path: "company",
+					},
+				});
 			return resp;
 		} catch (error) {
 			console.log(

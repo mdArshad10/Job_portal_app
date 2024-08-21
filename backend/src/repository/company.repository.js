@@ -36,16 +36,18 @@ class CompanyRepository {
 		}
 	}
 
-	async getCompanyByName(name){
+	async getCompanyByName(companyName) {
 		try {
-            const resp = await Company.findOne({ name });
-            return resp;
-        } catch (error) {
-            console.log(
-                "something wrong on crud repository",
-            );
-            throw error;
-        }
+			const resp = await Company.findOne({
+				name: companyName,
+			});
+			return resp;
+		} catch (error) {
+			console.log(
+				"something wrong on crud repository",
+			);
+			throw error;
+		}
 	}
 
 	async getAll() {
@@ -60,7 +62,7 @@ class CompanyRepository {
 		}
 	}
 
-	async update(id, data) {
+	async updateDetail(id, data) {
 		try {
 			const resp = await Company.findByIdAndUpdate(
 				id,

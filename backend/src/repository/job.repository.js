@@ -76,19 +76,23 @@ class JobRepository {
 		}
 	}
 
-	// async #getAdminCreatedJob(adminId) {
-	// 	try {
-	// 		const jobs = await Job.find({
-	// 			created_by: adminId,
-	// 		});
-	// 		return jobs;
-	// 	} catch (error) {
-	// 		console.log(
-	// 			"some thing worng with admin job creationg",
-	// 		);
-	// 		throw error;
-	// 	}
-	// }
+	async findFilterJobPopulate(jobId) {
+		try {
+			const job = await Job.findById(jobId).populate({
+				path: "applications",
+				options: { sort: { createdAt: -1 } },
+				populate: {
+					path: "application",
+				},
+			});
+			return job;
+		} catch (error) {
+			console.log(
+				"some error occurred while populating job",
+			);
+			throw error;
+		}
+	}
 }
 
 module.exports = JobRepository;

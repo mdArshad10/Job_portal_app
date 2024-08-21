@@ -86,7 +86,6 @@ class CompanyServices {
 		file,
 	) {
 		try {
-			// idhar cloudinary ayega
 			const fileUploadResponse =
 				await fileUploadInCloudinary(file?.path);
 
@@ -102,7 +101,7 @@ class CompanyServices {
 				logo: fileUploadResponse,
 			};
 
-			const company = await this.update(
+			const company = await this.updateDetail(
 				userGetIdByParams,
 				{ data },
 			);
