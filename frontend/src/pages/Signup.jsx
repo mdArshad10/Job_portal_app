@@ -49,11 +49,12 @@ const Signup = () => {
       const response = await register(formData).unwrap();
       console.log(response);
       if (response.success) {
-        dispatch(setAuthUser(response.data));
+        dispatch(setAuthUser(response.data.data));
+        toast.success("Registration successful");
         navigate("/");
       } else {
         console.log(data);
-        toast(data);
+        toast.error("something is wrong");
       }
     } catch (error) {
       toast(error.data?.data);
@@ -65,6 +66,7 @@ const Signup = () => {
       <Navbar />
       <div className="flex items-center mx-auto justify-center max-w-7xl rounded">
         <form
+          encType="multipart/form-data"
           onSubmit={submitSignupHandler}
           className="w-1/2 border border-gray-200 rounded-2xl p-4 my-10"
         >

@@ -8,11 +8,14 @@ import UpdateProfileDialog from "@/components/UpdateProfileDialog";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { Contact, Mail, Pen } from "lucide-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 // const skills = ["html", "CSS", "javascript", "Reactjs"];
 const skills = [];
 const Profile = () => {
   const isHaveResume = true;
+  const user = useSelector((store) => store.users?.user?.data);
+
   const [dialogBox, setDialogBox] = useState(false);
   return (
     <div>
@@ -23,17 +26,14 @@ const Profile = () => {
             <div>
               <Avatar className="h-24 w-24">
                 <AvatarImage
-                  src="https://github.com/shadcn.png"
-                  alt="@shadcn"
+                  src={user?.profile?.profilePhoto}
+                  alt={user?.fullName}
                 />
               </Avatar>
             </div>
             <div>
-              <h1 className="font-medium text-xl">Md. Arshad</h1>
-              <p>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Incidunt quasi volupta.
-              </p>
+              <h1 className="font-medium text-xl">{user?.fullName}</h1>
+              <p>{user?.profile?.bio ? user?.profile?.bio : "Add the bio"}</p>
             </div>
           </div>
           <Button
@@ -47,17 +47,17 @@ const Profile = () => {
         <div>
           <div className="flex items-center gap-2 my-2">
             <Mail />
-            <span>mdarshad@gmail.com</span>
+            <span>{user?.email}</span>
           </div>
           <div className="flex items-center gap-2 my-2">
             <Contact />
-            <span>+9163350082</span>
+            <span>{user?.phoneNumber}</span>
           </div>
         </div>
         <div>
           <h1>Skills</h1>
-          {skills.length >= 1 ? (
-            skills.map((item, index) => {
+          {user?.profile?.skill?.length >= 1 ? (
+            user?.profile?.skill?.map((item, index) => {
               return (
                 <Badge
                   variant="ghost"
@@ -69,20 +69,20 @@ const Profile = () => {
               );
             })
           ) : (
-            <span>No Skill added</span>
+            <span className="text-xs">No Skill added</span>
           )}
         </div>
 
         {/* resume */}
         <div className="grid w-full max-w-sm gap-1.5 items-center">
           <Label className="text-md font-bold">Resume</Label>
-          {isHaveResume ? (
+          {user?.profile?.resumeOriginalName ? (
             <a
-              href=""
+              href={`${user.profile?.resume}`}
               target="_blank"
               className="text-blue-500 w-full hover:underline cursor-pointer"
             >
-              Md.Arshad
+              {user?.profile?.resumeOriginalName}
             </a>
           ) : (
             <>Resume not uploaded</>

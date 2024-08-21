@@ -9,16 +9,13 @@ import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
-  // const {user}=useSelector(store => store.auth)
-  const user = {
-    role: "recruiter",
-  };
+  const user = useSelector((state) => state.users?.user?.data);
 
   useEffect(() => {
     if (user?.role == "recruiter") {
       navigate("/admin/companies");
     }
-  });
+  }, []);
 
   return (
     <div>

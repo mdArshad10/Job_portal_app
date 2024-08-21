@@ -62,7 +62,7 @@ router
 	.route("/login")
 	.post(userLoginDataValidate, loginTheUser);
 
-router.route("/logout").get(isAuthenticated, logoutTheUser);
+router.route("/logout").post(isAuthenticated, logoutTheUser);
 
 router
 	.route("/profile/update")

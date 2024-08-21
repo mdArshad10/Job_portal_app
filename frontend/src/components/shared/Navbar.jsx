@@ -2,12 +2,35 @@ import { LogOut, User2 } from "lucide-react";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useLogoutMutation } from "@/redux/Services/authServices";
+import { toast } from "sonner";
+import { setAuthUser } from "@/redux/Slice/authSlice";
 
 const Navbar = () => {
-  const user = useSelector((store) => store.user);
+  const user = useSelector((state) => state?.users?.user?.data);
   console.log(user);
+  
+  const [logout, { isLoading, isSuccess }] = useLogoutMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logoutHandler = async () => {
+    try {
+      const res = await logout().unwrap();
+      console.log(res);
+
+      if (res?.success) {
+        dispatch(setAuthUser(null));
+        navigate("/");
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.message);
+    }
+  };
 
   return (
     <div className="bg-white border border-gray-300">
@@ -48,8 +71,8 @@ const Navbar = () => {
               <PopoverTrigger asChild>
                 <Avatar className="cursor-pointer">
                   <AvatarImage
-                    src="https://github.com/shadcn.png"
-                    alt="@shadcn"
+                    src={user.profile?.profilePhoto}
+                    alt={user.fullName}
                   />
                 </Avatar>
               </PopoverTrigger>
@@ -57,8 +80,8 @@ const Navbar = () => {
                 <div className="flex items-center gap-4">
                   <Avatar className="cursor-pointer">
                     <AvatarImage
-                      src="https://github.com/shadcn.png"
-                      alt="@shadcn"
+                      src={user.profile?.profilePhoto}
+                      alt={user.fullName}
                     />
                   </Avatar>
                   <div>
@@ -83,7 +106,7 @@ const Navbar = () => {
 
                   <div className="flex gap-1 items-center">
                     <Link>
-                      <Button variant="link">
+                      <Button onClick={logoutHandler} variant="link">
                         <LogOut className="mr-2" />
                         Logout
                       </Button>

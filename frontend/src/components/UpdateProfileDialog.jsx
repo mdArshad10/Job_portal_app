@@ -9,19 +9,28 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useUpdateProfileMutation } from "@/redux/Services/authServices";
+import { setAuthUser } from "@/redux/Slice/authSlice";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
-const userSkills = ["javascript", "html", "CSS", "Reactjs"];
 const UpdateProfileDialog = ({ dialogBox, setDialogBox }) => {
-  const [loading, setLoading] = useState(false);
+  const user = useSelector((store) => store.users?.user?.data);
+  const [updateProfile] = useUpdateProfileMutation();
+
   const [userInput, setUserInput] = useState({
-    fullName: "arsha",
-    email: "arsha@gmail.com",
-    phoneNumber: "123456789",
-    bio: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis, at.",
-    skills: userSkills.map((skill) => skill),
-    file: "https:loremdaladld",
+    fullName: user?.fullName,
+    email: user?.email,
+    phoneNumber: user?.phoneNumber,
+    bio: user?.profile?.bio,
+    skills: user?.profile?.skills.map((skill) => skill),
+    file: user?.profile?.profilePhoto,
   });
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const changeEventHandler = (e) => {
     setUserInput({ ...userInput, [e.target?.name]: e.target?.value });
@@ -31,7 +40,7 @@ const UpdateProfileDialog = ({ dialogBox, setDialogBox }) => {
     setUserInput({ ...userInput, file: e.target?.files[0] });
   };
 
-  const submitSignupHandler = (e) => {
+  const submitSignupHandler = async (e) => {
     e.preventDefault();
     console.log(userInput);
     const formData = new FormData();
@@ -40,6 +49,15 @@ const UpdateProfileDialog = ({ dialogBox, setDialogBox }) => {
     formData.append("phoneNumber", userInput.phoneNumber);
     if (userInput.file) {
       formData.append("file", userInput.file);
+    }
+    try {
+      const resp = await updateProfile(formData).unwrap();
+      if (resp.success) {
+        toast.success(resp.message);
+        dispatch(setAuthUser(resp.data));
+      }
+    } catch (error) {
+      toast.error(error.message);
     }
   };
 
@@ -56,7 +74,7 @@ const UpdateProfileDialog = ({ dialogBox, setDialogBox }) => {
               Make changes to your profile here. Click save when you're done.
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={submitSignupHandler}>
+          <form onSubmit={submitSignupHandler} encType="multipart/form-data">
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="username" className="text-right">
@@ -66,11 +84,9 @@ const UpdateProfileDialog = ({ dialogBox, setDialogBox }) => {
                   id="username"
                   type="text"
                   name="fullName"
-                  value={userInput.fullName}
                   className="col-span-2"
                   defaultValue={userInput.fullName}
                   onChange={changeEventHandler}
-                  
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
@@ -81,11 +97,9 @@ const UpdateProfileDialog = ({ dialogBox, setDialogBox }) => {
                   id="email"
                   type="email"
                   name="email"
-                  value={userInput.email}
                   className="col-span-2"
                   defaultValue={userInput.email}
                   onChange={changeEventHandler}
-                  
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
@@ -96,11 +110,9 @@ const UpdateProfileDialog = ({ dialogBox, setDialogBox }) => {
                   id="phoneNumber"
                   type="text"
                   name="phoneNumber"
-                  value={userInput.phoneNumber}
                   className="col-span-2"
                   defaultValue={userInput.phoneNumber}
                   onChange={changeEventHandler}
-                
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
@@ -111,11 +123,9 @@ const UpdateProfileDialog = ({ dialogBox, setDialogBox }) => {
                   id="bio"
                   type="text"
                   name="bio"
-                  value={userInput.bio}
                   className="col-span-2"
                   defaultValue={userInput.bio}
                   onChange={changeEventHandler}
-                  
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
@@ -126,11 +136,9 @@ const UpdateProfileDialog = ({ dialogBox, setDialogBox }) => {
                   id="skills"
                   type="text"
                   name="skills"
-                  value={userInput.skills}
                   className="col-span-2"
                   defaultValue={userInput.skills}
                   onChange={changeEventHandler}
-                  
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
@@ -141,10 +149,9 @@ const UpdateProfileDialog = ({ dialogBox, setDialogBox }) => {
                   id="resume"
                   type="file"
                   accept="application/pdf"
-                  name="file"
+                  name={userInput.file}
                   className="col-span-2"
                   onChange={changeFileHandler}
-                  
                 />
               </div>
             </div>
