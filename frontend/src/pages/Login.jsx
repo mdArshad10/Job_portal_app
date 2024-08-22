@@ -46,7 +46,7 @@ const Login = () => {
   };
   return (
     <>
-      <Navbar />
+      
       <div className="flex items-center mx-auto justify-center max-w-7xl rounded">
         <form
           onSubmit={submitLoginHandler}

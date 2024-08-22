@@ -8,16 +8,17 @@ const Job = () => {
   const navigate = useNavigate();
   const jobId ="jhad;jad;fajdldljfdajf"
 
-  const daysAgoFunction = (mongodbTime)=>{
-    const createAt = new Date(mongodbTime);
-    const now = new Date();
-    const timeDifference = createAt.getDay() - now.getDay();
-    return timeDifference;
-  }
+  // const daysAgoFunction = (mongodbTime)=>{
+  //   const createAt = new Date(mongodbTime);
+  //   const now = new Date();
+  //   const timeDifference = createAt.getDay() - now.getDay();
+  //   return timeDifference;
+  // }
+  const daysAgoFunction = 2;
   return (
     <div className="p-5 rounded-md shadow-xl bg-white border border-gray-200 ">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-500">{timeDifference} day ago</p>
+        <p className="text-sm text-gray-500">{daysAgoFunction} day ago</p>
         <Button variant="outline" className="rounded-full" size="icon">
           <Bookmark />
         </Button>
@@ -55,7 +56,12 @@ const Job = () => {
         </Badge>
       </div>
       <div className="flex items-center gap-4 mt-5">
-        <Button onClick={()=>navigate(`/job/description/${jobId}`)} variant="outline">Details</Button>
+        <Button
+          onClick={() => navigate(`/job/description/${jobId}`)}
+          variant="outline"
+        >
+          Details
+        </Button>
         <Button className="bg-[#7289b7]">Save for Later</Button>
       </div>
     </div>

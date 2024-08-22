@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
-import {setSingleCompany} from '../../redux/Slice/companySlice';
+import { setSingleCompany } from "../../redux/Slice/companySlice";
 
 const CreateCompany = () => {
   const [companyName, setCompanyName] = useState("");
@@ -15,8 +15,8 @@ const CreateCompany = () => {
   const registerNewCompany = async (e) => {
     e.preventDefault();
     try {
-        // register the new company
-        
+      // register the new company
+
       // if company created successfully
       if (false) {
         toast.success("company registered successfully");
@@ -28,8 +28,7 @@ const CreateCompany = () => {
     } catch (error) {}
   };
   return (
-    <div>
-      <Navbar />
+    <div className="h-[75vh]">
       <div className="flex flex-col gap-4 max-w-4xl mx-auto my-4">
         <h1 className="font-bold text-2xl">Your Company Name</h1>
         <p className="text-gray-500">

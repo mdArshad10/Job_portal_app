@@ -63,7 +63,7 @@ const Signup = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div className="flex items-center mx-auto justify-center max-w-7xl rounded">
         <form
           encType="multipart/form-data"

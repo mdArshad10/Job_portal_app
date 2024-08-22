@@ -53,7 +53,7 @@ const CompanySetup = () => {
 
   return (
     <div>
-      <Navbar />
+      
       <div className="max-w-xl mx-auto my-10">
         <form action="">
           <div className="flex items-center gap-5 p-8">

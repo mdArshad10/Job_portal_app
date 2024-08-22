@@ -6,7 +6,7 @@ const JobDescription = () => {
   const isApplied = true;
   return (
     <>
-    <Navbar/>
+    
       <div className="max-w-7xl mx-auto my-10 ">
         <h1 className="font-bold text-xl">Frontend Developer</h1>
         <div className="flex items-center justify-between">
