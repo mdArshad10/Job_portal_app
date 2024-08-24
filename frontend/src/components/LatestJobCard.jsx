@@ -1,10 +1,10 @@
 import { Badge } from "./ui/badge";
 
-const LatestJobCard = ({ job }) => {
-  const salaryPackage = (salary) => {
-    return (salary * 12) / 100;
-  };
+export const salaryPackage = (salary) => {
+  return (salary * 12) / 100;
+};
 
+const LatestJobCard = ({ job }) => {
   return (
     <div className="p-5 rounded-md shadow-xl bg-white border border-gray-100">
       <div>

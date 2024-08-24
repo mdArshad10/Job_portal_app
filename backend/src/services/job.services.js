@@ -75,10 +75,10 @@ class JobServices {
 
 	async getJobByUsingJobId(jobId) {
 		try {
+			console.log(jobId);
+			
 			const response =
-				await this.jobRepository.getByData({
-					_id: jobId,
-				});
+				await this.jobRepository.findJobById(jobId);
 			return response;
 		} catch (error) {
 			throw error;

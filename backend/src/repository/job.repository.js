@@ -26,7 +26,11 @@ class JobRepository {
 
 	async getByData(data) {
 		try {
+			console.log(data);
+			
 			const resp = await Job.find(data);
+			console.log(resp);
+			
 			return resp;
 		} catch (error) {
 			console.log(

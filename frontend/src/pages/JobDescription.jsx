@@ -1,22 +1,29 @@
+import { salaryPackage } from "@/components/LatestJobCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useGetJobQuery } from "@/redux/Services/jobServices";
+import { useParams } from "react-router-dom";
 
 const JobDescription = () => {
+  const { jobId } = useParams();
+  const { data: jobDetail, isError, isLoading, error } = useGetJobQuery(jobId);
+  console.log(jobDetail);
+
   const isApplied = true;
   return (
     <>
       <div className="max-w-7xl mx-auto my-10 ">
-        <h1 className="font-bold text-xl">Frontend Developer</h1>
+        <h1 className="font-bold text-xl">{jobDetail?.title}</h1>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap2 mt-4">
             <Badge variant="ghost" className="text-blue-700 font-bold">
-              12 Positions
+              {jobDetail.position} Positions
             </Badge>
             <Badge variant="ghost" className="text-[#F83002] font-bold">
-              Part Time
+              {jobDetail.jobType}
             </Badge>
             <Badge variant="ghost" className="text-[#7289b7] font-bold">
-              24 LPA
+              {salaryPackage(jobDetail.salary)} LPA
             </Badge>
           </div>
           <Button
@@ -32,43 +39,50 @@ const JobDescription = () => {
         </div>
         <div>
           <h1 className="border-b-2 border-b-gray-300 font-medium py-4">
-            Job Description
+            Description
           </h1>
           <div className="my-4">
             <h1 className="font-bold my-1">
               Role:
               <span className="pl-4 font-normal text-gray-800">
-                Frontend Developer
+                {jobDetail.map((requirement) => requirement)}
               </span>
             </h1>
             <h1 className="font-bold my-1">
               Location:
-              <span className="pl-4 font-normal text-gray-800">Kolkata</span>
+              <span className="pl-4 font-normal text-gray-800">
+                {jobDetail.location}
+              </span>
             </h1>
             <h1 className="font-bold my-1">
               Description:
               <span className="pl-4 font-normal text-gray-800">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Maiores dignissimos necessitatibus eaque iste voluptas magni
-                veritatis ab enim, voluptatum aperiam totam quasi error quisquam
-                quidem eos possimus dolore a voluptatem.
+                {jobDetail.description}
               </span>
             </h1>
             <h1 className="font-bold my-1">
-              Experience: 
-              <span className="pl-4 font-normal text-gray-800">2 Yrs</span>
+              Experience:
+              <span className="pl-4 font-normal text-gray-800">
+                {jobDetail.experienceLevel} Yrs
+              </span>
             </h1>
             <h1 className="font-bold my-1">
               Salary:
-              <span className="pl-4 font-normal text-gray-800">12 LPA</span>
+              <span className="pl-4 font-normal text-gray-800">
+                {salaryPackage(jobDetail.salary)} LPA
+              </span>
             </h1>
             <h1 className="font-bold my-1">
               Total Application:
-              <span className="pl-4 font-normal text-gray-800">13</span>
+              <span className="pl-4 font-normal text-gray-800">
+                {jobDetail.applications.length}
+              </span>
             </h1>
             <h1 className="font-bold my-1">
               Posted Job:
-              <span className="pl-4 font-normal text-gray-800">17-07-2024</span>
+              <span className="pl-4 font-normal text-gray-800">
+                {jobDetail.createdAt.toLocaleString()}
+              </span>
             </h1>
           </div>
         </div>

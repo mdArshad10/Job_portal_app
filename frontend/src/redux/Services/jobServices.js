@@ -15,8 +15,8 @@ const jobServicesApi = authApi.injectEndpoints({
       }),
     }),
     getJob: build.query({
-      query: () => ({
-        url: ``,
+      query: (id) => ({
+        url: `${JOB_GET}/${id}`,
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -37,4 +37,5 @@ const jobServicesApi = authApi.injectEndpoints({
   }),
 });
 
-export const { useCreateJobMutation,useGetAllJobsQuery,useGetJobQuery } = jobServicesApi;
+export const { useCreateJobMutation, useGetAllJobsQuery, useGetJobQuery } =
+  jobServicesApi;
