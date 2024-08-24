@@ -40,13 +40,11 @@ const jobSchema = new mongoose.Schema(
 			type: Number,
 			required: [true, "job position is required"],
 		},
-		company: [
-			{
-				type: mongoose.Schema.Types.ObjectId,
-				ref: "Company",
-				required: true,
-			},
-		],
+		company: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Company",
+			required: true,
+		},
 		created_by: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User",

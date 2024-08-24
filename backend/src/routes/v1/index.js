@@ -14,6 +14,7 @@ const {
 	logoutTheUser,
 	registerTheUser,
 	updateTheProfile,
+	getUserDetails,
 } = require("../../controllers/user.controller.js");
 
 const {
@@ -61,6 +62,10 @@ router
 router
 	.route("/login")
 	.post(userLoginDataValidate, loginTheUser);
+
+router
+	.route("/profile")
+	.get(isAuthenticated, getUserDetails);
 
 router.route("/logout").post(isAuthenticated, logoutTheUser);
 

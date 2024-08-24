@@ -1,9 +1,8 @@
 import { authApi } from "../api-service";
-import { JOB_GET } from "../../constant.js";
 
-const jobServicesApi = authApi.injectEndpoints({
+const applicationServicesApi = authApi.injectEndpoints({
   endpoints: (build) => ({
-    createJob: build.mutation({
+    createJobApplication: build.mutation({
       query: (data) => ({
         url: ``,
         method: "POST",
@@ -14,7 +13,8 @@ const jobServicesApi = authApi.injectEndpoints({
         },
       }),
     }),
-    getJob: build.query({
+
+    getAllJobs: build.query({
       query: () => ({
         url: ``,
         method: "GET",
@@ -24,10 +24,23 @@ const jobServicesApi = authApi.injectEndpoints({
         },
       }),
     }),
-    getAllJobs: build.query({
+
+    getApplicants: build.query({
       query: () => ({
-        url: `${JOB_GET}`,
+        url: ``,
         method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }),
+    }),
+
+    updateJobStatus: build.mutation({
+      query: (data) => ({
+        url: ``,
+        method: "PUT",
+        body: data,
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -37,4 +50,9 @@ const jobServicesApi = authApi.injectEndpoints({
   }),
 });
 
-export const { useCreateJobMutation,useGetAllJobsQuery,useGetJobQuery } = jobServicesApi;
+export const {
+  useCreateJobApplicationMutation,
+  useGetAllJobsQuery,
+  useGetApplicantsQuery,
+  useUpdateJobStatusMutation,
+} = applicationServicesApi;

@@ -4,8 +4,8 @@ import {
   USER_LOGIN,
   USER_PROFILE_UPDATE,
   USER_LOGOUT,
+  USER_DETAILS,
 } from "../../constant.js";
-import { data } from "autoprefixer";
 
 const authServicesApi = authApi.injectEndpoints({
   endpoints: (build) => ({
@@ -40,6 +40,16 @@ const authServicesApi = authApi.injectEndpoints({
         url: `${USER_PROFILE_UPDATE}`,
         method: "PUT",
         body: data,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }),
+    }),
+    getUser: build.query({
+      query: () => ({
+        url: `${USER_DETAILS}`,
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${localStorage.getItem("token")}`,

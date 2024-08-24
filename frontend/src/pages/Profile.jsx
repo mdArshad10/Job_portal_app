@@ -11,9 +11,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 
 // const skills = ["html", "CSS", "javascript", "Reactjs"];
-const skills = [];
 const Profile = () => {
-  const isHaveResume = true;
   const user = useSelector((store) => store.users?.user?.data);
 
   const [dialogBox, setDialogBox] = useState(false);

@@ -4,7 +4,6 @@ const fileUploadInCloudinary = require("../utils/cloudinary.js");
 const ErrorHandler = require("../utils/error.js");
 const { StatusCodes } = require("http-status-codes");
 
-
 class UserServices {
 	constructor() {
 		this.UserRepository = new UserRepository();
@@ -97,6 +96,21 @@ class UserServices {
 		}
 	}
 
+	async getUser(userId) {
+		try {
+			const user = await this.UserRepository.getById(
+				userId,
+			);
+			if(!user) {
+				throw new ErrorHandler(false, "User not found", StatusCodes.BAD_REQUEST);
+			}
+			return user;
+		} catch (error) {
+			console.log("some thing wrong with get user");
+			throw error;
+		}
+	}
+
 	async updateUser(req) {
 		try {
 			const {
@@ -109,7 +123,6 @@ class UserServices {
 			const userId = req.user;
 
 			console.log(req.file);
-			
 
 			const user = await this.UserRepository.getById(
 				userId,

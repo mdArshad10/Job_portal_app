@@ -15,7 +15,7 @@ const AppliedJobTable = () => {
         <TableCaption>A list of your Applied Jobs</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead  >Date</TableHead>
+            <TableHead>Date</TableHead>
             <TableHead>Job Role</TableHead>
             <TableHead>Company</TableHead>
             <TableHead className="text-right">Status</TableHead>
@@ -24,7 +24,7 @@ const AppliedJobTable = () => {
         <TableBody>
           {[1, 2, 3, 4].map((invoice, index) => (
             <TableRow key={index}>
-              <TableCell >17-07-2024</TableCell>
+              <TableCell>17-07-2024</TableCell>
               <TableCell>MERN Stack</TableCell>
               <TableCell>Google</TableCell>
               <TableCell className="text-right">

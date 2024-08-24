@@ -1,4 +1,4 @@
-import Navbar from "@/components/shared/Navbar";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -62,8 +62,7 @@ const Signup = () => {
   };
 
   return (
-    <>
-      
+    <>    
       <div className="flex items-center mx-auto justify-center max-w-7xl rounded">
         <form
           encType="multipart/form-data"

@@ -1,4 +1,3 @@
-import Navbar from "@/components/shared/Navbar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -6,7 +5,6 @@ const JobDescription = () => {
   const isApplied = true;
   return (
     <>
-    
       <div className="max-w-7xl mx-auto my-10 ">
         <h1 className="font-bold text-xl">Frontend Developer</h1>
         <div className="flex items-center justify-between">
@@ -38,17 +36,17 @@ const JobDescription = () => {
           </h1>
           <div className="my-4">
             <h1 className="font-bold my-1">
-              Role:{" "}
+              Role:
               <span className="pl-4 font-normal text-gray-800">
                 Frontend Developer
               </span>
             </h1>
             <h1 className="font-bold my-1">
-              Location:{" "}
+              Location:
               <span className="pl-4 font-normal text-gray-800">Kolkata</span>
             </h1>
             <h1 className="font-bold my-1">
-              Description:{" "}
+              Description:
               <span className="pl-4 font-normal text-gray-800">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                 Maiores dignissimos necessitatibus eaque iste voluptas magni
@@ -57,19 +55,19 @@ const JobDescription = () => {
               </span>
             </h1>
             <h1 className="font-bold my-1">
-              Experience:{" "}
+              Experience: 
               <span className="pl-4 font-normal text-gray-800">2 Yrs</span>
             </h1>
             <h1 className="font-bold my-1">
-              Salary:{" "}
+              Salary:
               <span className="pl-4 font-normal text-gray-800">12 LPA</span>
             </h1>
             <h1 className="font-bold my-1">
-              Total Application:{" "}
+              Total Application:
               <span className="pl-4 font-normal text-gray-800">13</span>
             </h1>
             <h1 className="font-bold my-1">
-              Posted Job:{" "}
+              Posted Job:
               <span className="pl-4 font-normal text-gray-800">17-07-2024</span>
             </h1>
           </div>

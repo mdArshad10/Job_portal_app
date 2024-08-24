@@ -1,21 +1,46 @@
-import React from "react";
+import React, { useEffect } from "react";
 import LatestJobCard from "./LatestJobCard";
+import { useGetAllJobsQuery } from "../redux/Services/jobServices";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllJobs } from "../redux/Slice/jobSlice";
+import { toast } from "sonner";
 
-const randomJobs = [1, 2, 3, 4, 5, 6, 7, 8];
 const LatestJobs = () => {
+  const jobs = useSelector((store) => store.jobs.allJobs);
+  const dispatch = useDispatch();
+  const {
+    data: allJobs,
+    isFetching,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetAllJobsQuery();
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(getAllJobs(allJobs.data));
+    } else if (isError) {
+      toast.error(error.data?.message);
+    }
+  });
   return (
     <div className="mx-auto max-w-7xl my-20">
       <h1 className="text-4xl font-bold">
         <span className="text-[#6A38C2]">Latest & Top</span> Job Opening
       </h1>
       <div className="grid grid-cols-3 gap-4 my-2">
-        {randomJobs.slice(0, 6).map((item, index) => {
-          return (
-            <React.Fragment key={index}>
-              <LatestJobCard />
-            </React.Fragment>
-          );
-        })}
+        {jobs.length == 0 ? (
+          <span>No Job is opening</span>
+        ) : (
+          jobs.map((job) => {
+            return (
+              <React.Fragment key={job._id}>
+                <LatestJobCard job={job} />
+              </React.Fragment>
+            );
+          })
+        )}
       </div>
     </div>
   );

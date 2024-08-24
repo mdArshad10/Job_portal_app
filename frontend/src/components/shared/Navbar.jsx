@@ -10,7 +10,6 @@ import { setAuthUser } from "@/redux/Slice/authSlice";
 
 const Navbar = () => {
   const user = useSelector((state) => state?.users?.user?.data);
-  console.log(user);
   
   const [logout, { isLoading, isSuccess }] = useLogoutMutation();
   const dispatch = useDispatch();
@@ -19,7 +18,6 @@ const Navbar = () => {
   const logoutHandler = async () => {
     try {
       const res = await logout().unwrap();
-      console.log(res);
 
       if (res?.success) {
         dispatch(setAuthUser(null));
@@ -27,7 +25,7 @@ const Navbar = () => {
         toast.success(res.data.message);
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
       toast.error(error.response?.message);
     }
   };

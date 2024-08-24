@@ -1,15 +1,11 @@
 import FilterCard from "@/components/FilterCard";
 import Job from "@/components/Job";
-import Navbar from "@/components/shared/Navbar";
 import React from "react";
-
-const jobArray =[1,2,3,4,6,5,7,9]
+const jobArray = [1, 2, 3, 4, 6, 5, 7, 9];
 
 const Jobs = () => {
-    
   return (
     <div>
-      
       <div className="max-w-7xl mx-auto mt-5">
         <div className="flex gap-5">
           <div className="w-[20%]">

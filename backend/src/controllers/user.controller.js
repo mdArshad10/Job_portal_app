@@ -110,6 +110,32 @@ const loginTheUser = async (req, res, next) => {
 };
 
 // @DESCRIPTION: this is used for the logout the user
+// @METHOD: [PUT]      /api/v1/profile/update
+// @ACCESS: private
+const getUserDetails = async (req, res, next) => {
+	try {
+		const response = await UserService.getUser(
+			req.user,
+		);
+		return res.status(StatusCodes.OK).json({
+			success: true,
+			message: "welcome to the Job hunt",
+
+			data: response,
+			err: null,
+		});
+	} catch (error) {
+		console.log(error);
+		return res.status(StatusCodes.BAD_REQUEST).json({
+			success: true,
+			message: error.message,
+			data: null,
+			error,
+		});
+	}
+};
+
+// @DESCRIPTION: this is used for the logout the user
 // @METHOD: [GET]      /api/v1/logout
 // @ACCESS: private
 const logoutTheUser = async (req, res, next) => {
@@ -180,4 +206,5 @@ module.exports = {
 	loginTheUser,
 	logoutTheUser,
 	updateTheProfile,
+	getUserDetails,
 };
