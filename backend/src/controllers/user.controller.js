@@ -201,10 +201,39 @@ const updateTheProfile = async (req, res, next) => {
 	}
 };
 
+// @DESCRIPTION: Get the all users
+// @METHOD: [PUT]      /api/v1/all-profile
+// @ACCESS: private
+const getAllUserInAdmin = async (req, res, next) => {
+	try {
+		const user = await UserService.getAllUser();
+		return res.status(StatusCodes.OK).json({
+			success: true,
+			message: "Get all users",
+			data: user,
+			err: null,
+		});
+	} catch (error) {
+		console.log(
+			"some error with getting all user the profile on controller",
+			error,
+		);
+		return res
+			.status(StatusCodes.INTERNAL_SERVER_ERROR)
+			.json({
+				success: false,
+				message: "some thing wrong with controller",
+				data: null,
+				err: error,
+			});
+	}
+};
+
 module.exports = {
 	registerTheUser,
 	loginTheUser,
 	logoutTheUser,
 	updateTheProfile,
 	getUserDetails,
+	getAllUserInAdmin,
 };

@@ -165,6 +165,16 @@ class UserServices {
 			throw error;
 		}
 	}
+
+	async getAllUser(){
+		try {
+            const users = await this.UserRepository.getAll();
+            return users;
+        } catch (error) {
+            console.log("some thing wrong with get all users");
+            throw error;
+        }
+	}
 }
 
 module.exports = UserServices;

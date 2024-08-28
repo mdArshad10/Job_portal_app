@@ -15,6 +15,7 @@ const {
 	registerTheUser,
 	updateTheProfile,
 	getUserDetails,
+	getAllUserInAdmin,
 } = require("../../controllers/user.controller.js");
 
 const {
@@ -67,7 +68,13 @@ router
 	.route("/profile")
 	.get(isAuthenticated, getUserDetails);
 
-router.route("/logout").post(isAuthenticated, logoutTheUser);
+router
+	.route("/all-profile")
+	.get(isAuthenticated, isAdmin, getAllUserInAdmin);
+
+router
+	.route("/logout")
+	.post(isAuthenticated, logoutTheUser);
 
 router
 	.route("/profile/update")
@@ -122,8 +129,9 @@ router
 	.route("/:id/applicants")
 	.get(isAuthenticated, getApplicant);
 
-router.route("/status/:id/update")
-    .put(isAuthenticated, updateStatus);
+router
+	.route("/status/:id/update")
+	.put(isAuthenticated, updateStatus);
 
 // ======== Application routes End ========
 

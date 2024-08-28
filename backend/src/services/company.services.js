@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const { CompanyRepository } = require("../repository");
 const ErrorHandler = require("../utils/error");
+const fileUploadInCloudinary = require("../utils/cloudinary");
 
 class CompanyServices {
 	constructor() {
@@ -96,15 +97,22 @@ class CompanyServices {
 					StatusCodes.BAD_REQUEST,
 				);
 			}
+			// data = {
+			// 	description,
+			// 	website,
+			// 	location,
+			// 	logo: fileUploadResponse,
+			// };
 			data = {
 				...data,
 				logo: fileUploadResponse,
 			};
 
-			const company = await this.updateDetail(
-				userGetIdByParams,
-				{ data },
-			);
+			const company =
+				await this.companyRepository.updateDetail(
+					userGetIdByParams,
+					data,
+				);
 			if (!company) {
 				throw new ErrorHandler(
 					false,
@@ -117,9 +125,11 @@ class CompanyServices {
 
 			return company;
 		} catch (error) {
+			console.log(error);
+
 			throw new ErrorHandler(
 				false,
-				error.messsage,
+				"some thing went wrong at company service layer",
 				StatusCodes.BAD_REQUEST,
 				error,
 				null,

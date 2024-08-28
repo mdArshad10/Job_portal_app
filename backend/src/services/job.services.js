@@ -19,6 +19,7 @@ class JobServices {
 				experience,
 				companyId,
 			} = data;
+			console.log(data);
 
 			const jobs = await this.jobRepository.creates({
 				title,
@@ -76,7 +77,7 @@ class JobServices {
 	async getJobByUsingJobId(jobId) {
 		try {
 			console.log(jobId);
-			
+
 			const response =
 				await this.jobRepository.findJobById(jobId);
 			return response;

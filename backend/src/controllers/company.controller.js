@@ -132,20 +132,18 @@ const getCompanyById = async (req, res, next) => {
 // @ACCESS: private
 const updateCompanyDetails = async (req, res, next) => {
 	try {
-		console.log(req.body);
+		const { errors } = validationResult(req);
 
-		// const { errors } = validationResult(req);
-
-		// if (errors.length != 0) {
-		// 	const message = errors.map(err => err.msg);
-		// 	throw new ErrorHandler(
-		// 		false,
-		// 		"fill all the field",
-		// 		StatusCodes.BAD_REQUEST,
-		// 		errors,
-		// 		message,
-		// 	);
-		// }
+		if (errors.length != 0) {
+			const message = errors.map(err => err.msg);
+			throw new ErrorHandler(
+				false,
+				"fill all the field",
+				StatusCodes.BAD_REQUEST,
+				errors,
+				message,
+			);
+		}
 
 		const response =
 			await companyServices.updateCompanyDetail(
@@ -161,6 +159,8 @@ const updateCompanyDetails = async (req, res, next) => {
 			error: null,
 		});
 	} catch (error) {
+		console.log(error);
+
 		return res.status(StatusCodes.BAD_REQUEST).json({
 			success: false,
 			message: error.message,

@@ -64,13 +64,30 @@ class CompanyRepository {
 
 	async updateDetail(id, data) {
 		try {
+			console.log(data);
+			
 			const resp = await Company.findByIdAndUpdate(
 				id,
-				data,
+				{
+					$set: {
+						description: data.description,
+						website: data.website,
+						location: data.location,
+						logo: data.logo,
+					},
+				},
 				{ new: true },
 			);
+			console.log(
+				"inside the company repository for updating the detail",
+			);
+
+			console.log(resp);
+
 			return resp;
 		} catch (error) {
+			console.log(error);
+
 			console.log(
 				"something wrong on crud repository",
 			);

@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const { JobServices } = require("../services");
 const { validationResult } = require("express-validator");
+const ErrorHandler = require("../utils/error");
 
 const jobServices = new JobServices();
 
@@ -21,6 +22,7 @@ const createJob = async (req, res, next) => {
 				message,
 			);
 		}
+		
 
 		const response = await jobServices.postJob(
 			req.body,
@@ -33,6 +35,8 @@ const createJob = async (req, res, next) => {
 			error: null,
 		});
 	} catch (error) {
+		console.log(error);
+
 		console.log("some thing wrong with create job");
 		return res.status(StatusCodes.BAD_REQUEST).json({
 			success: false,
