@@ -49,6 +49,8 @@ const getAppliedJobs = async (req, res, next) => {
 			error: null,
 		});
 	} catch (error) {
+		console.log(error);
+
 		return res.status(StatusCodes.BAD_REQUEST).json({
 			success: false,
 			message: error.message,
@@ -74,6 +76,8 @@ const getApplicant = async (req, res, next) => {
 			error: null,
 		});
 	} catch (error) {
+		console.log(error);
+
 		return res.status(StatusCodes.OK).json({
 			success: true,
 			message: "something wrong with get applicant",

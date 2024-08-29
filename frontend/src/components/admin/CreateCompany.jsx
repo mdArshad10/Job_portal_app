@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../shared/Navbar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -7,25 +6,38 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { setSingleCompany } from "../../redux/Slice/companySlice";
+import { useCreateCompanyMutation } from "@/redux/Services/companyServices";
 
 const CreateCompany = () => {
   const [companyName, setCompanyName] = useState("");
+  const [createCompany, { data, isSuccess, isError, error }] =
+    useCreateCompanyMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const registerNewCompany = async (e) => {
     e.preventDefault();
     try {
       // register the new company
+      console.log(companyName);
+
+      const resp = await createCompany({companyName}).unwrap();
+      console.log(resp);
 
       // if company created successfully
-      if (false) {
+      if (resp.success) {
         toast.success("company registered successfully");
         // add the single company detail into the store
-        // dispatch(setSingleCompany())
-        const companyId = "jdakjfkasdlk";
+        dispatch(setSingleCompany(resp.data));
+        const companyId = resp.data._id;
         navigate(`/admin/companies/${companyId}`);
+      } else {
+        console.log(error);
+        toast.error(error.message);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      toast.error("something is wrong");
+    }
   };
   return (
     <div className="h-[75vh]">
@@ -53,7 +65,7 @@ const CreateCompany = () => {
           >
             Cancel
           </Button>
-          <Button>Continue</Button>
+          <Button onClick={registerNewCompany}>Continue</Button>
         </div>
       </div>
     </div>

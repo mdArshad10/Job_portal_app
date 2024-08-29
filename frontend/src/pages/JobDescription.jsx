@@ -1,32 +1,62 @@
 import { salaryPackage } from "@/components/LatestJobCard";
+import Loader from "@/components/shared/Loader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useGetJobQuery } from "@/redux/Services/jobServices";
+import { useCreateJobMutation, useGetJobQuery } from "@/redux/Services/jobServices";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const JobDescription = () => {
   const { jobId } = useParams();
+
+  const [
+    createJob,
+    {
+      isLoading: loadingForCreateJob,
+      data: createJobData,
+      isError: errorForCreateJob,
+      isSuccess: successForCreateJob,
+    },
+  ] = useCreateJobMutation();
   const { data: jobDetail, isError, isLoading, error } = useGetJobQuery(jobId);
-  console.log(jobDetail);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  const applyJobHunter = async () => {
+    try {
+      const response = await createJob(jobId).unwrap();
+      if (successForCreateJob) {
+        toast.success(response.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        error.response.data.message || "some things wrong with creating job"
+      );
+    }
+  };
 
   const isApplied = true;
   return (
     <>
       <div className="max-w-7xl mx-auto my-10 ">
-        <h1 className="font-bold text-xl">{jobDetail?.title}</h1>
+        <h1 className="font-bold text-xl">{jobDetail?.data?.title}</h1>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap2 mt-4">
             <Badge variant="ghost" className="text-blue-700 font-bold">
-              {jobDetail.position} Positions
+              {jobDetail.data?.position} Positions
             </Badge>
             <Badge variant="ghost" className="text-[#F83002] font-bold">
-              {jobDetail.jobType}
+              {jobDetail.data?.jobType}
             </Badge>
             <Badge variant="ghost" className="text-[#7289b7] font-bold">
-              {salaryPackage(jobDetail.salary)} LPA
+              {salaryPackage(jobDetail.data?.salary)} LPA
             </Badge>
           </div>
           <Button
+            onClick={isApplied ? null : applyJobHunter}
             disable={isApplied}
             className={`rounded-xl ${
               isApplied
@@ -45,43 +75,43 @@ const JobDescription = () => {
             <h1 className="font-bold my-1">
               Role:
               <span className="pl-4 font-normal text-gray-800">
-                {jobDetail.map((requirement) => requirement)}
+                {jobDetail.data?.requirements.map((requirement) => requirement)}
               </span>
             </h1>
             <h1 className="font-bold my-1">
               Location:
               <span className="pl-4 font-normal text-gray-800">
-                {jobDetail.location}
+                {jobDetail.data?.location}
               </span>
             </h1>
             <h1 className="font-bold my-1">
               Description:
               <span className="pl-4 font-normal text-gray-800">
-                {jobDetail.description}
+                {jobDetail.data?.description}
               </span>
             </h1>
             <h1 className="font-bold my-1">
               Experience:
               <span className="pl-4 font-normal text-gray-800">
-                {jobDetail.experienceLevel} Yrs
+                {jobDetail.data?.experienceLevel} Yrs
               </span>
             </h1>
             <h1 className="font-bold my-1">
               Salary:
               <span className="pl-4 font-normal text-gray-800">
-                {salaryPackage(jobDetail.salary)} LPA
+                {salaryPackage(jobDetail.data?.salary)} LPA
               </span>
             </h1>
             <h1 className="font-bold my-1">
               Total Application:
               <span className="pl-4 font-normal text-gray-800">
-                {jobDetail.applications.length}
+                {jobDetail.data?.applications?.length}
               </span>
             </h1>
             <h1 className="font-bold my-1">
               Posted Job:
               <span className="pl-4 font-normal text-gray-800">
-                {jobDetail.createdAt.toLocaleString()}
+                {jobDetail.data?.createdAt.split("T")[0]}
               </span>
             </h1>
           </div>

@@ -97,12 +97,6 @@ class CompanyServices {
 					StatusCodes.BAD_REQUEST,
 				);
 			}
-			// data = {
-			// 	description,
-			// 	website,
-			// 	location,
-			// 	logo: fileUploadResponse,
-			// };
 			data = {
 				...data,
 				logo: fileUploadResponse,

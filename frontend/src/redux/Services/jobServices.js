@@ -1,11 +1,11 @@
 import { authApi } from "../api-service";
-import { JOB_GET } from "../../constant.js";
+import { JOB_GET, APPLICANT_CREATE } from "../../constant.js";
 
 const jobServicesApi = authApi.injectEndpoints({
   endpoints: (build) => ({
     createJob: build.mutation({
-      query: (data) => ({
-        url: ``,
+      query: (id) => ({
+        url: `${APPLICANT_CREATE}/${id}`,
         method: "POST",
         body: data,
         headers: {

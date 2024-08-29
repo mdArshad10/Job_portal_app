@@ -87,6 +87,7 @@ class ApplicationServices {
 				await this.jobRepository.findFilterJobPopulate(
 					jobId,
 				);
+			console.log(jobs);
 			if (!jobs) {
 				throw new ErrorHandler(
 					false,
@@ -94,6 +95,7 @@ class ApplicationServices {
 					StatusCodes.NOT_FOUND,
 				);
 			}
+
 			return jobs;
 		} catch (error) {
 			console.log(error);

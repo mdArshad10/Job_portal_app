@@ -1,10 +1,11 @@
 import { authApi } from "../api-service";
+import { COMPANY_CREATE, COMPANY_GET } from "@/constant.js";
 
 const companyServicesApi = authApi.injectEndpoints({
   endpoints: (build) => ({
-    CreateCompany: build.mutation({
+    createCompany: build.mutation({
       query: (data) => ({
-        url: ``,
+        url: `${COMPANY_CREATE}`,
         method: "POST",
         body: data,
         headers: {
@@ -35,7 +36,7 @@ const companyServicesApi = authApi.injectEndpoints({
     }),
     updateCompanyDetail: build.mutation({
       query: (data) => ({
-        url: ``,
+        url: `${COMPANY_GET}/66d06cdc374460f08c09ca24`,
         method: "PUT",
         body: data,
         headers: {

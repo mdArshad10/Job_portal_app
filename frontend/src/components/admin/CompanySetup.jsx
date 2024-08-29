@@ -1,27 +1,32 @@
 import React, { useState } from "react";
-import Navbar from "../shared/Navbar";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import {setSingleCompany} from '../../redux/Slice/companySlice';
+import { setSingleCompany } from "../../redux/Slice/companySlice";
+import { useUpdateCompanyDetailMutation } from "@/redux/Services/companyServices";
 
 const CompanySetup = () => {
   const [userInput, setUserInput] = useState({
-    name: "",
     description: "",
     website: "",
     location: "",
     file: "",
   });
+  const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  console.log(id);
 
-  const handleInputChange = async (e) => {
-    setUserInput({ ...userInput, [e.target.name]: e.target.value });
+  const [updateCompanyDetail, { data, isError, isLoading, isSuccess, error }] =
+    useUpdateCompanyDetailMutation();
+  console.log(isLoading);
+  console.log(data);
+  const handleInputChange = (e) => {
+    setUserInput({ ...userInput, [e.target?.name]: e.target?.value });
   };
 
   const handleFileChange = (e) => {
@@ -29,33 +34,52 @@ const CompanySetup = () => {
   };
 
   const websiteDetailSubmitHandler = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", userInput.name);
-    formData.append("description", userInput.description);
-    formData.append("website", userInput.website);
-    formData.append("location", userInput.location);
-    if(userInput.file){
-        formData.append("file", userInput.file);
-    }
     try {
-        // send the data to the server
-        // if company details update successfully 
-        if(false){
-            toast.success("company data updated successfully")
-            navigate('/admin/companies');
-        }
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append("description", userInput.description);
+      console.log("this is for testing");
+      console.log(formData);
+      
+      
+      formData.append("website", userInput.website);
+      formData.append("location", userInput.location);
+      console.log(formData);
+
+      if (userInput.file) {
+        formData.append("file", userInput.file);
+      }
+      console.log(formData);
+
+      // send the data to the server
+
+      const response = await updateCompanyDetail(formData).unwrap();
+      console.log(response);
+
+      // if company details update successfully
+      if (response.success) {
+        toast.success("company data updated successfully");
+        navigate("/admin/companies");
+      } else {
+        console.log(error);
+
+        toast.error("Failed to update company data");
+      }
     } catch (error) {
-        toast.error("Failed to update company data")
-        
+      console.log(error);
+
+      toast.error("Some thing the wrong with updating the company");
     }
   };
 
   return (
     <div>
-      
       <div className="max-w-xl mx-auto my-10">
-        <form action="">
+        <form
+          onSubmit={websiteDetailSubmitHandler}
+          encType="multipart/form-data"
+        >
           <div className="flex items-center gap-5 p-8">
             <Button
               variant="outline"
@@ -67,16 +91,6 @@ const CompanySetup = () => {
             <h1 className="font-bold text-xl">Company Setup</h1>
           </div>
           <div className="grid grid-cols-2 gap-4 items-center">
-            <div className="">
-              <Label>Company's Name: </Label>
-              <Input
-                type="text"
-                placeholder="Your company name"
-                name="name"
-                value={userInput.name}
-                onChange={handleInputChange}
-              />
-            </div>
             <div>
               <Label>Company's Description: </Label>
               <Input
@@ -97,16 +111,7 @@ const CompanySetup = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="">
-              <Label>Company Name</Label>
-              <Input
-                type="text"
-                placeholder="Your company name"
-                name="name"
-                value={userInput.name}
-                onChange={handleInputChange}
-              />
-            </div>
+
             <div className="">
               <Label>Company's Location</Label>
               <Input
@@ -120,20 +125,15 @@ const CompanySetup = () => {
             <div className="">
               <Label>Company's Logo</Label>
               <Input
+                id="picture"
                 type="file"
                 accept="image/*"
-                checked={handleFileChange}
-                name="name"
-                value={userInput.name}
+                className="cursor-pointer"
+                onChange={handleFileChange}
               />
             </div>
           </div>
-          <Button
-            variant="outline"
-            type="submit"
-            onClick={websiteDetailSubmitHandler}
-            className="w-full my-8"
-          >
+          <Button variant="outline" type="submit" className="w-full my-8">
             Update
           </Button>
         </form>

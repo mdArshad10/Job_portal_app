@@ -122,7 +122,6 @@ class UserServices {
 			} = req.body;
 			const userId = req.user;
 
-			console.log(req.file);
 
 			const user = await this.UserRepository.getById(
 				userId,
