@@ -14,17 +14,15 @@ const CompanySetup = () => {
     description: "",
     website: "",
     location: "",
-    file: "",
+    file: null,
   });
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  console.log(id);
 
   const [updateCompanyDetail, { data, isError, isLoading, isSuccess, error }] =
     useUpdateCompanyDetailMutation();
-  console.log(isLoading);
-  console.log(data);
+
   const handleInputChange = (e) => {
     setUserInput({ ...userInput, [e.target?.name]: e.target?.value });
   };
@@ -34,56 +32,59 @@ const CompanySetup = () => {
   };
 
   const websiteDetailSubmitHandler = async (e) => {
-    try {
-      e.preventDefault();
+    e.preventDefault();
+    const formDataToSend = new FormData();
 
-      const formData = new FormData();
-      formData.append("description", userInput.description);
-      console.log("this is for testing");
-      console.log(formData);
-      
-      
-      formData.append("website", userInput.website);
-      formData.append("location", userInput.location);
-      console.log(formData);
+    formDataToSend.append("id", "kafdlkaldkfjalkdjlkasd");
+    formDataToSend.append("description", userInput?.description);
+    console.log("this is for testing");
+    formDataToSend.append("name", true);
+    formDataToSend.append("name", 72);
+    console.log(formDataToSend.get("name"));
+    console.log(formDataToSend);
 
-      if (userInput.file) {
-        formData.append("file", userInput.file);
-      }
-      console.log(formData);
+    formDataToSend.append("website", userInput?.website);
+    formDataToSend.append("location", userInput?.location);
+    console.log(formDataToSend);
 
-      // send the data to the server
-
-      const response = await updateCompanyDetail(formData).unwrap();
-      console.log(response);
-
-      // if company details update successfully
-      if (response.success) {
-        toast.success("company data updated successfully");
-        navigate("/admin/companies");
-      } else {
-        console.log(error);
-
-        toast.error("Failed to update company data");
-      }
-    } catch (error) {
-      console.log(error);
-
-      toast.error("Some thing the wrong with updating the company");
+    if (userInput.file) {
+      formDataToSend.append("file", userInput?.file);
     }
+    console.log(formDataToSend.get("file"));
+
+    // try {
+    // send the data to the server
+    // const response = await updateCompanyDetail(formDataToSend).unwrap();
+    // console.log(response);
+
+    // if company details update successfully
+    // if (response?.success) {
+    //   toast.success("company data updated successfully");
+    //   navigate("/admin/companies");
+    // } else {
+    //   console.log(error);
+
+    //   toast.error("Failed to update company data");
+    // }
+    // } catch (error) {
+    //   console.log(error);
+
+    //   toast.error("Some thing the wrong with updating the company");
+    // }
   };
 
   return (
     <div>
       <div className="max-w-xl mx-auto my-10">
         <form
-          onSubmit={websiteDetailSubmitHandler}
           encType="multipart/form-data"
+          onSubmit={websiteDetailSubmitHandler}
         >
           <div className="flex items-center gap-5 p-8">
             <Button
               variant="outline"
               className="flex items-center gap-2 text-gray-500 font-semibold"
+              onClick={() => navigate("/admin/companies")}
             >
               <ArrowLeft />
               <span>Back</span>

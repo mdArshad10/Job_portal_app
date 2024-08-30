@@ -17,13 +17,18 @@ const LatestJobs = () => {
     error,
   } = useGetAllJobsQuery();
 
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(getAllJobs(allJobs.data));
-    } else if (isError) {
-      toast.error(error.data?.message);
-    }
-  });
+  if (isLoading && isFetching) {
+    return <div>Loading...</div>;
+  }
+  if (isSuccess) {
+    dispatch(getAllJobs(allJobs.data));
+  }
+
+  if (isError && error) {
+    toast.error(error.message);
+    return null;
+  }
+
   return (
     <div className="mx-auto max-w-7xl my-20">
       <h1 className="text-4xl font-bold">

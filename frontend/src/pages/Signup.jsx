@@ -48,8 +48,8 @@ const Signup = () => {
     try {
       const response = await register(formData).unwrap();
       console.log(response);
-      if (response.success) {
-        dispatch(setAuthUser(response.data.data));
+      if (response?.success) {
+        dispatch(setAuthUser(response.data?.data));
         toast.success("Registration successful");
         navigate("/");
       } else {
@@ -57,7 +57,7 @@ const Signup = () => {
         toast.error("something is wrong");
       }
     } catch (error) {
-      toast(error.data?.data);
+      toast.error(error?.data?.data);
     }
   };
 

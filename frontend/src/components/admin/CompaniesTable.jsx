@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -16,16 +15,28 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Edit2, MoreHorizontal } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const CompaniesTable = () => {
-  const compaines = [
-    {
-      name: "alkdjl;afkj",
-      description: "akdlkfadlkfjal;dk",
-      createdAt: "2022-01-01",
-      logo: "https://github.com/shadcn.png",
-    },
-  ];
+  const { companies, searchCompanyByText } = useSelector(
+    (store) => store.company
+  );
+
+  const [filterCompany, setFilterCompany] = useState(companies);
+
+  useEffect(() => {
+    const filteredCompany = companies.filter((company) => {
+      if (!searchCompanyByText) {
+        return true;
+      }
+      return company?.name?.toLowerCase().includes(searchCompanyByText);
+    });
+
+    setFilterCompany(filteredCompany);
+  }, [companies, searchCompanyByText]);
+
+  const navigate = useNavigate();
   return (
     <Table>
       <TableCaption>List of the recent registered Company</TableCaption>
@@ -38,10 +49,8 @@ const CompaniesTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {compaines.length <= 0 ? (
-          <span>You haven't registered any company yet.</span>
-        ) : (
-          compaines.map((company, index) => {
+        {filterCompany.length > 0 ? (
+          filterCompany?.map((company, index) => {
             return (
               <TableRow key={index}>
                 <TableCell>
@@ -56,15 +65,18 @@ const CompaniesTable = () => {
                     />
                   </Avatar>
                 </TableCell>
-                <TableCell>{company.name}</TableCell>
-                <TableCell>{company.createdAt}</TableCell>
+                <TableCell>{company?.name}</TableCell>
+                <TableCell>{company?.createdAt.split("T")[0]}</TableCell>
                 <TableCell className="flex justify-end">
                   <Popover>
                     <PopoverTrigger asChild>
                       <MoreHorizontal />
                     </PopoverTrigger>
                     <PopoverContent className="w-32">
-                      <div className="flex items-center gap-2 w-fit cursor-pointer">
+                      <div
+                        onClick={() => navigate(`${company?._id}`)}
+                        className="flex items-center gap-2 w-fit cursor-pointer"
+                      >
                         <Edit2 className="w-4" />
                         <span>Edit</span>
                       </div>
@@ -74,6 +86,8 @@ const CompaniesTable = () => {
               </TableRow>
             );
           })
+        ) : (
+          <span>No company is registered</span>
         )}
       </TableBody>
     </Table>

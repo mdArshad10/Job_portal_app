@@ -24,9 +24,10 @@ const companyServicesApi = authApi.injectEndpoints({
         },
       }),
     }),
+
     getCompanyByUserId: build.query({
       query: () => ({
-        url: ``,
+        url: `/company`,
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -34,6 +35,7 @@ const companyServicesApi = authApi.injectEndpoints({
         },
       }),
     }),
+
     updateCompanyDetail: build.mutation({
       query: (data) => ({
         url: `${COMPANY_GET}/66d06cdc374460f08c09ca24`,

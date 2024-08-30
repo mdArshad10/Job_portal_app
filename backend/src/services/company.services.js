@@ -87,6 +87,8 @@ class CompanyServices {
 		file,
 	) {
 		try {
+			console.log(file);
+			
 			const fileUploadResponse =
 				await fileUploadInCloudinary(file?.path);
 
